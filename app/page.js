@@ -1,23 +1,11 @@
 import Link from 'next/link';
 import HeroCard from './_components/HeroCard';
+import { heroes } from './_lib/heroes';
 
-const heroes = [
-  {
-    name: 'Chaos Knight',
-    role: 'Carry',
-    description: 'A carry with lots of illusions',
-  },
-  {
-    name: 'Rubick',
-    role: 'Support',
-    description: 'A support with ability to steal spells',
-  },
-  {
-    name: 'Lion',
-    role: 'Nuker/Support',
-    description: 'A support to quickly kill enemy heroes',
-  },
-];
+const featuredNames = ['Troll Warlord', 'Chaos Knight', 'Rubick', 'Arc Warden'];
+const featuredHeroes = heroes.filter((hero) =>
+  featuredNames.includes(hero.name),
+);
 
 export default function Home() {
   return (
@@ -41,7 +29,7 @@ export default function Home() {
           <h2 className="text-2xl font-semibold">Featured Heroes</h2>
 
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {heroes.map((hero) => (
+            {featuredHeroes.map((hero) => (
               <HeroCard
                 key={hero.name}
                 name={hero.name}

@@ -1,4 +1,5 @@
 import HeroCard from '../_components/HeroCard';
+import { heroes } from '../_lib/heroes';
 
 export default function Heroes() {
   return (
@@ -14,11 +15,16 @@ export default function Heroes() {
           <h2 className="text-2xl font-semibold">All Heroes</h2>
 
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <HeroCard
-              name="Axe"
-              role="Strength • Initiator"
-              description="A powerful melee hero who excels at starting fights."
-            />
+            {heroes.map((hero) => {
+              return (
+                <HeroCard
+                  key={hero.name}
+                  name={hero.name}
+                  role={hero.role}
+                  description={hero.description}
+                />
+              );
+            })}
           </div>
         </section>
       </div>
