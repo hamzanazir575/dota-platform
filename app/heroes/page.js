@@ -1,4 +1,5 @@
 import HeroCard from '../_components/HeroCard';
+import { heroImages } from '../_lib/hero-images';
 import { heroes } from '../_lib/heroes';
 
 export default function Heroes() {
@@ -22,6 +23,7 @@ export default function Heroes() {
                   name={hero.name}
                   role={hero.role}
                   description={hero.description}
+                  image={heroImages[hero.name]}
                 />
               );
             })}

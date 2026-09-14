@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import HeroCard from './_components/HeroCard';
 import { heroes } from './_lib/heroes';
+import { heroImages } from './_lib/hero-images';
 
 const featuredNames = ['Troll Warlord', 'Chaos Knight', 'Rubick', 'Arc Warden'];
 const featuredHeroes = heroes.filter((hero) =>
@@ -35,6 +36,7 @@ export default function Home() {
                 name={hero.name}
                 role={hero.role}
                 description={hero.description}
+                image={heroImages[hero.name]}
               />
             ))}
           </div>
