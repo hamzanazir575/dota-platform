@@ -1,4 +1,5 @@
 // app/layout.js
+import Footer from './_components/Footer';
 import Navbar from './_components/Navbar';
 import './globals.css';
 
@@ -13,6 +14,7 @@ export default function RootLayout({ children }) {
       <body>
         <Navbar />
         {children}
+        <Footer />
       </body>
     </html>
   );
