@@ -3,12 +3,16 @@ import { heroes } from '@/app/_lib/heroes';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { abilities } from '@/app/_lib/abilities';
+import AbilityCard from '@/app/_components/AbilityCard';
+import { heroStats } from '@/app/_lib/hero-stats';
+import HeroStats from '@/app/_components/HeroStats';
 
 export default async function HeroPage({ params }) {
   const { hero: heroSlug } = await params;
 
   const currentHero = heroes.find((hero) => {
-    return hero.name.toLowerCase() === heroSlug;
+    return hero.name.toLowerCase().replaceAll(' ', '-') === heroSlug;
   });
 
   if (!currentHero) {
@@ -16,13 +20,15 @@ export default async function HeroPage({ params }) {
   }
 
   const image = heroImages[currentHero.name];
+  const currentAbilities = abilities[currentHero.name] ?? [];
+  const currentStats = heroStats[currentHero.name];
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-6xl">
         <Link
           href="/heroes"
-          className="inline-flex items-center text-sm font-medium text-neutral-400 transition hover:text-red-400"
+          className="inline-flex items-center text-xl text-red-300 font-medium text-neutral-400 transition hover:text-red-400"
         >
           ← Back to all heroes
         </Link>
@@ -71,6 +77,17 @@ export default async function HeroPage({ params }) {
                 {currentHero.description}
               </p>
             </div>
+          </div>
+        </section>
+
+        <HeroStats stats={currentStats} />
+        <section className="mt-12">
+          <h2 className="text-3xl font-bold">Abilities</h2>
+
+          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+            {currentAbilities.map((ability, index) => (
+              <AbilityCard key={`${ability.name}-${index}`} ability={ability} />
+            ))}
           </div>
         </section>
       </div>

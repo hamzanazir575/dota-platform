@@ -33,7 +33,8 @@ export const heroes = [
   {
     name: 'Chaos Knight',
     role: 'Strength • Carry',
-    description: 'A carry with lots of illusions.',
+    description:
+      'Chaos Knight is an army unto himself. Able to summon a cavalry of clones to demolish enemy defenses, should an enemy present itself, he can rift reality to pull him and his phantasms close enough to rain brutal cudgel blows upon their head..',
   },
   {
     name: 'Clockwerk',
