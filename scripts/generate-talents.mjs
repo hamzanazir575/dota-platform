@@ -13,6 +13,12 @@ const __dirname = path.dirname(__filename);
 
 const talentsFilePath = path.join(__dirname, '..', 'app', '_lib', 'talents.js');
 
+function resolveTalentText(rawText) {
+  if (!rawText) return null;
+
+  return rawText.replace(/\{s:[a-zA-Z0-9_]+\}/g, 'X');
+}
+
 function getTalentText(talentName) {
   const talent = abilityData[talentName];
 
@@ -20,7 +26,7 @@ function getTalentText(talentName) {
     return null;
   }
 
-  return talent.dname || null;
+  return resolveTalentText(talent.dname);
 }
 
 async function generateTalents() {
@@ -63,6 +69,7 @@ async function generateTalents() {
       const talentData = {
         name: text,
         id: talentName,
+        tier,
       };
 
       if (tier === 1) {

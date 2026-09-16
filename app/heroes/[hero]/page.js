@@ -7,6 +7,8 @@ import { abilities } from '@/app/_lib/abilities';
 import AbilityCard from '@/app/_components/AbilityCard';
 import { heroStats } from '@/app/_lib/hero-stats';
 import HeroStats from '@/app/_components/HeroStats';
+import { talents } from '@/app/_lib/talents';
+import TalentTree from '@/app/_components/TalentTree';
 
 export default async function HeroPage({ params }) {
   const { hero: heroSlug } = await params;
@@ -22,6 +24,7 @@ export default async function HeroPage({ params }) {
   const image = heroImages[currentHero.name];
   const currentAbilities = abilities[currentHero.name] ?? [];
   const currentStats = heroStats[currentHero.name];
+  const currentTalents = talents[currentHero.name];
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white sm:px-8">
@@ -81,6 +84,7 @@ export default async function HeroPage({ params }) {
         </section>
 
         <HeroStats stats={currentStats} />
+        <TalentTree talents={currentTalents} />
         <section className="mt-12">
           <h2 className="text-3xl font-bold">Abilities</h2>
 
