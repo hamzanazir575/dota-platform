@@ -1,5 +1,4 @@
-import HeroCard from '../_components/HeroCard';
-import { heroImages } from '../_lib/hero-images';
+import HeroList from '../_components/HeroList';
 import { heroes } from '../_lib/heroes';
 
 export default function Heroes() {
@@ -15,19 +14,7 @@ export default function Heroes() {
         <section className="mt-12">
           <h2 className="text-2xl font-semibold">All Heroes</h2>
 
-          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {heroes.map((hero) => {
-              return (
-                <HeroCard
-                  key={hero.name}
-                  name={hero.name}
-                  role={hero.role}
-                  description={hero.description}
-                  image={heroImages[hero.name]}
-                />
-              );
-            })}
-          </div>
+          <HeroList heroes={heroes} />
         </section>
       </div>
     </main>

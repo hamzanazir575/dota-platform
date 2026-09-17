@@ -23,8 +23,17 @@ export default async function HeroPage({ params }) {
 
   const image = heroImages[currentHero.name];
   const currentAbilities = abilities[currentHero.name] ?? [];
-  const currentStats = heroStats[currentHero.name];
-  const currentTalents = talents[currentHero.name];
+  const currentStats = heroStats[currentHero.name] ?? {
+    primaryAttribute: 'Universal',
+    attackType: 'Unknown',
+    roles: [],
+  };
+  const currentTalents = talents[currentHero.name] ?? {
+    level10: [],
+    level15: [],
+    level20: [],
+    level25: [],
+  };
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white sm:px-8">

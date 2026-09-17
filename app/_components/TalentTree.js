@@ -16,7 +16,7 @@ export default function TalentTree({ talents }) {
             Level {level}
           </h3>
 
-          <div className="mt-3 flex flex-wrap gap-4 justify-center">
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
             {talents[key].map((talent) => (
               <div
                 key={talent.id}
