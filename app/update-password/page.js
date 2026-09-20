@@ -1,32 +1,27 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/clients';
 
-export default function SignupPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+export default function UpdatePasswordPage() {
+  const router = useRouter();
+
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [message, setMessage] = useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
 
     setError('');
-    setSuccess('');
+    setMessage('');
 
-    if (!name || !email || !password || !confirmPassword) {
-      setError('Please fill in all fields.');
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match.');
+    if (!password || !confirmPassword) {
+      setError('Please fill in both password fields.');
       return;
     }
 
@@ -35,19 +30,17 @@ export default function SignupPage() {
       return;
     }
 
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+
     setLoading(true);
 
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signUp({
-      email: email.trim(),
+    const { error } = await supabase.auth.updateUser({
       password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-        data: {
-          name: name.trim(),
-        },
-      },
     });
 
     setLoading(false);
@@ -57,14 +50,14 @@ export default function SignupPage() {
       return;
     }
 
-    setSuccess(
-      'Account created. Please check your email and confirm your account.',
-    );
+    setMessage('Password updated successfully.');
 
-    setName('');
-    setEmail('');
     setPassword('');
     setConfirmPassword('');
+
+    setTimeout(() => {
+      router.push('/signin');
+    }, 1500);
   }
 
   return (
@@ -76,58 +69,20 @@ export default function SignupPage() {
               Dota 2 Platform
             </p>
 
-            <h1 className="mt-3 text-3xl font-bold">Create your account</h1>
+            <h1 className="mt-3 text-3xl font-bold">Create a new password</h1>
 
             <p className="mt-2 text-sm text-neutral-400">
-              Sign up to get started.
+              Choose a new password for your account.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">
             <div>
               <label
-                htmlFor="name"
-                className="mb-2 block text-sm font-medium text-neutral-200"
-              >
-                Name
-              </label>
-
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Your name"
-                autoComplete="name"
-                className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-4 py-3 text-white outline-none transition focus:border-red-500"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-neutral-200"
-              >
-                Email
-              </label>
-
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                autoComplete="email"
-                className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-4 py-3 text-white outline-none transition focus:border-red-500"
-              />
-            </div>
-
-            <div>
-              <label
                 htmlFor="password"
                 className="mb-2 block text-sm font-medium text-neutral-200"
               >
-                Password
+                New Password
               </label>
 
               <input
@@ -146,7 +101,7 @@ export default function SignupPage() {
                 htmlFor="confirm-password"
                 className="mb-2 block text-sm font-medium text-neutral-200"
               >
-                Confirm Password
+                Confirm New Password
               </label>
 
               <input
@@ -154,7 +109,7 @@ export default function SignupPage() {
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Enter your password again"
+                placeholder="Enter your new password again"
                 autoComplete="new-password"
                 className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-4 py-3 text-white outline-none transition focus:border-red-500"
               />
@@ -166,20 +121,29 @@ export default function SignupPage() {
               </p>
             )}
 
-            {success && (
+            {message && (
               <p className="rounded-lg border border-green-800 bg-green-950/40 px-4 py-3 text-sm text-green-300">
-                {success}
+                {message}
               </p>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+              className="w-full rounded-lg bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {loading ? 'Creating account...' : 'Create account'}
+              {loading ? 'Updating...' : 'Update password'}
             </button>
           </form>
+
+          <p className="mt-6 text-center text-sm text-neutral-400">
+            <Link
+              href="/signin"
+              className="text-red-400 transition-colors hover:text-red-300"
+            >
+              Back to sign in
+            </Link>
+          </p>
         </div>
       </div>
     </main>

@@ -3,7 +3,9 @@ import { createClient } from '@/lib/supabase/server';
 
 export async function GET(request) {
   const requestUrl = new URL(request.url);
+
   const code = requestUrl.searchParams.get('code');
+  const next = requestUrl.searchParams.get('next');
 
   if (!code) {
     return NextResponse.redirect(
@@ -21,5 +23,9 @@ export async function GET(request) {
     );
   }
 
-  return NextResponse.redirect(new URL('/', requestUrl.origin));
+  const allowedNextPaths = ['/update-password'];
+
+  const redirectPath = allowedNextPaths.includes(next) ? next : '/';
+
+  return NextResponse.redirect(new URL(redirectPath, requestUrl.origin));
 }

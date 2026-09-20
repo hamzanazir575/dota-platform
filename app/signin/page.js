@@ -10,7 +10,6 @@ export default function SignInPage() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -97,6 +96,14 @@ export default function SignInPage() {
                 autoComplete="current-password"
                 className="w-full rounded-lg border border-neutral-700 bg-neutral-950 px-4 py-3 text-white outline-none transition focus:border-red-500"
               />
+              <div className="mt-2 flex justify-end">
+                <Link
+                  href="/forgot-password"
+                  className="text-sm text-neutral-400 transition-colors hover:text-red-400"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             {error && (
@@ -108,7 +115,7 @@ export default function SignInPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-lg bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="w-full rounded-lg bg-red-600 px-4 py-3 font-semibold text-white transition hover:bg-red-500 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
@@ -125,3 +132,62 @@ export default function SignInPage() {
     </main>
   );
 }
+
+// import { useState } from 'react';
+// import SignupForm from '../components/SignupForm'
+
+// export default function SignupForm() {
+//     const [name, setName] = useState('')
+//     const [email, setEmail] = useState('')
+//     const [password, setPassword] = useState('')
+//     const [confirmPassword, setConfirmPassword] = useState('')
+//     const [error, setError] = useState('')
+
+//     const handleSubmit = (e) =>  {
+//         e.preventDefault()
+
+//         setError('')
+
+//         if (!name || !password || !confirmPassword || !email)
+//         setError('Please fill in all fields.')
+//         return
+
+//         if(password.length < 8 )
+//         setError('Password must be at least 8 characters.')
+//         return
+
+//         if(password !== confirmPassword )
+//         setError('Passwords must match')
+//         return
+//     }
+
+//     return (
+//         <div className='bg-black'>
+//         <form onSubmit={handleSubmit}>
+//             <input
+//             type='text'
+//             value={name}
+//             onChange={(e) => setName(e.target.value)}
+//             />
+
+//             <input
+//             type='email'
+//             value={email}
+//             onChange={(e) => setEmail(e.target.value)}
+//             />
+//             <input
+//             type='password'
+//             value={password}
+//             onChange={(e) => setPassword(e.target.value)}
+//             />
+//             <input
+//             type='password'
+//             value={confirmPassword}
+//             onChange={(e) => setConfirmPassword(e.target.value)}
+//             />
+
+//             {error && <p>{error}</p>}
+//             </form>
+//             </div>
+//     )
+// }
