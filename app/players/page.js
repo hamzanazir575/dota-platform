@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import PlayerCard from '../_components/PlayerCard';
 
 export default function Players() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,10 +38,12 @@ export default function Players() {
       setError('Please search');
       return;
     }
+
+    const query = searchTerm.trim().toLowerCase();
+
     const filtered = players.filter((player) => {
       return (
-        player.personaname &&
-        player.personaname.toLowerCase().includes(searchTerm.toLowerCase())
+        player.personaname && player.personaname.toLowerCase().includes(query)
       );
     });
     setResults(filtered);
@@ -82,7 +85,7 @@ export default function Players() {
           )}
         </div>
         <section className="mt-6">
-          <h2 className="text-2xl font-semibold">Search Results</h2>
+          <h2 className="text-2xl font-semibold mb-3">Search Results</h2>
           {fetchError && (
             <p className="mt-3 rounded-lg border border-red-800 bg-red-950/40 px-4 py-3 text-sm text-red-300">
               {fetchError}
@@ -92,7 +95,7 @@ export default function Players() {
 
           {!loading &&
             results.map((player) => {
-              return <p key={player.account_id}>{player.personaname}</p>;
+              return <PlayerCard key={player.account_id} player={player} />;
             })}
 
           {!loading && !fetchError && hasSearched && results.length === 0 && (
