@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/server';
 const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'Heroes', href: '/heroes' },
-  { name: 'Players', href: '/Players' },
+  { name: 'Players', href: '/players' },
 ];
 
 export default async function Navbar() {

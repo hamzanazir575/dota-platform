@@ -1,20 +1,50 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Players() {
   const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState('');
+  const [fetchError, setFetchError] = useState('');
+  const [players, setPlayers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [results, setResults] = useState([]);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  useEffect(() => {
+    async function fetchPlayers() {
+      setLoading(true);
+
+      try {
+        const response = await fetch('https://api.opendota.com/api/proPlayers');
+        const data = await response.json();
+        setPlayers(data);
+      } catch (err) {
+        console.log(err);
+        setFetchError('Could not load players. Please try again');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPlayers();
+  }, []);
 
   function handleSearch(e) {
     e.preventDefault();
     setError('');
 
-    if (!searchTerm) {
+    if (!searchTerm.trim()) {
       setError('Please search');
       return;
     }
-    console.log(searchTerm);
+    const filtered = players.filter((player) => {
+      return (
+        player.personaname &&
+        player.personaname.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+    setResults(filtered);
+    setHasSearched(true);
   }
 
   return (
@@ -53,6 +83,21 @@ export default function Players() {
         </div>
         <section className="mt-6">
           <h2 className="text-2xl font-semibold">Search Results</h2>
+          {fetchError && (
+            <p className="mt-3 rounded-lg border border-red-800 bg-red-950/40 px-4 py-3 text-sm text-red-300">
+              {fetchError}
+            </p>
+          )}
+          {loading && <p>Loading players...</p>}
+
+          {!loading &&
+            results.map((player) => {
+              return <p key={player.account_id}>{player.personaname}</p>;
+            })}
+
+          {!loading && !fetchError && hasSearched && results.length === 0 && (
+            <p>No players found.</p>
+          )}
         </section>
       </div>
     </main>
