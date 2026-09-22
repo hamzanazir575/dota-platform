@@ -1,12 +1,17 @@
+import Link from 'next/link';
+
 export default function PlayerCard({ player }) {
   return (
-    <div className="my-8 cursor-pointer overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-lg transition hover:-translate-y-1 hover:border-red-500">
+    <Link
+      href={`/players/${player.account_id}`}
+      className="my-8 block cursor-pointer overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-lg transition hover:-translate-y-1 hover:border-red-500"
+    >
       <div className="flex h-40 items-center justify-center bg-neutral-800">
         {player.avatarfull ? (
           <img
             src={player.avatarfull}
             alt={player.personaname}
-            className="h-full w-full object-cover"
+            className="h-full w-full object-contain p-2"
           />
         ) : (
           <span className="text-neutral-500">No photo</span>
@@ -19,6 +24,6 @@ export default function PlayerCard({ player }) {
           {player.team_name || 'Free agent'}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -20,6 +20,24 @@ export default function Players() {
         const response = await fetch('https://api.opendota.com/api/proPlayers');
         const data = await response.json();
         setPlayers(data);
+
+        const savedSearch = sessionStorage.getItem('players-search');
+
+        if (savedSearch) {
+          setSearchTerm(savedSearch);
+
+          const query = savedSearch.trim().toLowerCase();
+
+          const filtered = data.filter((player) => {
+            return (
+              player.personaname &&
+              player.personaname.toLowerCase().includes(query)
+            );
+          });
+
+          setResults(filtered);
+          setHasSearched(true);
+        }
       } catch (err) {
         console.log(err);
         setFetchError('Could not load players. Please try again');
@@ -40,6 +58,8 @@ export default function Players() {
     }
 
     const query = searchTerm.trim().toLowerCase();
+
+    sessionStorage.setItem('players-search', searchTerm.trim());
 
     const filtered = players.filter((player) => {
       return (
