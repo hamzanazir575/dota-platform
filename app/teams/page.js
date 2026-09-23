@@ -1,4 +1,4 @@
-import TeamsList from '../_components/TeamList';
+import TeamsList from '../_components/TeamsList';
 
 export default async function TeamsPage() {
   const response = await fetch('https://api.opendota.com/api/teams');

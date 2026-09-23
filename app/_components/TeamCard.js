@@ -1,6 +1,12 @@
+import Link from 'next/link';
+
 export default function TeamCard({ team }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-lg transition hover:-translate-y-1 hover:border-red-500">
+    <Link
+      href={`/teams/${team.team_id}`}
+      className="overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-lg transition hover:-translate-y-1 hover:border-red-500 cursor-pointer
+    "
+    >
       <div className="flex h-32 items-center justify-center bg-neutral-800">
         {team.logo_url ? (
           <img
@@ -26,6 +32,6 @@ export default function TeamCard({ team }) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }
