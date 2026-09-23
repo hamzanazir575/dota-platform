@@ -7,6 +7,8 @@ const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'Heroes', href: '/heroes' },
   { name: 'Players', href: '/players' },
+  { name: 'Matches', href: '/matches' },
+  { name: 'Teams', href: '/teams' },
 ];
 
 export default async function Navbar() {
@@ -41,7 +43,7 @@ export default async function Navbar() {
             Dota 2 Platform
           </Link>
 
-          <ul className="hidden items-center gap-6 md:flex">
+          <ul className="hidden items-center gap-6 min[900]:flex">
             {navLinks.map((link) => (
               <li key={link.name}>
                 <NavLink href={link.href}>{link.name}</NavLink>
@@ -50,7 +52,7 @@ export default async function Navbar() {
           </ul>
         </div>
 
-        <div className="hidden items-center gap-4 border-l border-neutral-800 pl-6 md:flex">
+        <div className="hidden items-center gap-4 border-l border-neutral-800 pl-6 min[900]:flex">
           {user ? (
             <>
               <NavLink href="/account">{displayName}</NavLink>
@@ -71,7 +73,7 @@ export default async function Navbar() {
           )}
         </div>
 
-        <details className="group md:hidden">
+        <details className="group min-[900px]:hidden">
           <summary className="flex cursor-pointer list-none items-center justify-center rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-neutral-300 transition hover:border-neutral-500 hover:text-white [&::-webkit-details-marker]:hidden">
             <span className="text-xl leading-none">☰</span>
           </summary>
