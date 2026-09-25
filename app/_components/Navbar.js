@@ -9,6 +9,7 @@ const navLinks = [
   { name: 'Players', href: '/players' },
   { name: 'Matches', href: '/matches' },
   { name: 'Teams', href: '/teams' },
+  { name: 'Tournaments', href: '/tournaments' },
 ];
 
 export default async function Navbar() {
