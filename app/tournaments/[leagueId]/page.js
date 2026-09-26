@@ -48,7 +48,6 @@ export default async function TournamentPage({ params }) {
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white sm:px-8">
       <div className="mx-auto max-w-7xl">
-        {/* Tournament Header */}
         <section className="rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
           <div className="bg-gradient-to-r from-neutral-900 via-neutral-900 to-red-950/30 p-6 sm:p-8">
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-red-400">
@@ -71,7 +70,6 @@ export default async function TournamentPage({ params }) {
           </div>
         </section>
 
-        {/* Participating Teams */}
         <section className="mt-12">
           <div className="mb-6">
             <h2 className="text-2xl font-bold">Participating Teams</h2>

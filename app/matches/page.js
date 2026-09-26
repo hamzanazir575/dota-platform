@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default async function MatchesPage() {
   const response = await fetch('https://api.opendota.com/api/proMatches');
 
@@ -51,9 +53,10 @@ export default async function MatchesPage() {
                 : 'Dire Victory';
 
               return (
-                <div
+                <Link
                   key={match.match_id}
-                  className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5 shadow-lg transition hover:border-red-500/60 sm:p-6"
+                  href={`/matches/${match.match_id}`}
+                  className="block rounded-2xl border border-neutral-800 bg-neutral-900 p-5 shadow-lg transition hover:border-red-500/60 sm:p-6"
                 >
                   <div className="mb-5 flex flex-col gap-2 border-b border-neutral-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
@@ -126,7 +129,7 @@ export default async function MatchesPage() {
 
                     <span>Series ID: {match.series_id}</span>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

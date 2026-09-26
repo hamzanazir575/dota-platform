@@ -44,7 +44,7 @@ export default async function Navbar() {
             Dota 2 Platform
           </Link>
 
-          <ul className="hidden items-center gap-6 min[900]:flex">
+          <ul className="hidden items-center gap-6 min-[900]:flex">
             {navLinks.map((link) => (
               <li key={link.name}>
                 <NavLink href={link.href}>{link.name}</NavLink>
