@@ -1,6 +1,7 @@
 import Link from 'next/link';
+import ItemBuild from './ItemBuild';
 
-export default function MatchPlayerRow({ player, team, hero, item }) {
+export default function MatchPlayerRow({ player, team, hero, items }) {
   function formatNumber(value) {
     return new Intl.NumberFormat('en-US').format(value ?? 0);
   }
@@ -75,7 +76,7 @@ export default function MatchPlayerRow({ player, team, hero, item }) {
         value={formatNumber(player.net_worth)}
         className="text-green-400"
       />
-      <p>{item?.dname || 'No item'}</p>
+      <ItemBuild items={items} />
     </Link>
   );
 }

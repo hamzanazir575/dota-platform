@@ -281,7 +281,14 @@ export default async function MatchPage({ params }) {
                     player={player}
                     team="Radiant"
                     hero={getHeroInfo(player.hero_id)}
-                    item={getItemInfo(player.item_0)}
+                    items={[
+                      player.item_0,
+                      player.item_1,
+                      player.item_2,
+                      player.item_3,
+                      player.item_4,
+                      player.item_5,
+                    ].map(getItemInfo)}
                   />
                 ))}
               </div>
@@ -299,7 +306,14 @@ export default async function MatchPage({ params }) {
                     player={player}
                     team="Dire"
                     hero={getHeroInfo(player.hero_id)}
-                    item={getItemInfo(player.item_0)}
+                    items={[
+                      player.item_0,
+                      player.item_1,
+                      player.item_2,
+                      player.item_3,
+                      player.item_4,
+                      player.item_5,
+                    ].map(getItemInfo)}
                   />
                 ))}
               </div>
