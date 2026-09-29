@@ -60,15 +60,19 @@ export default async function Home() {
           </div>
         </section>
         <section className="mt-16 text-left">
-          <h2 className="text-2xl font-semibold text-red-400 text-center mb-4">
+          <h2 className="text-2xl font-semibold text-red-300 text-center mb-4">
             Recent Matches
           </h2>
 
-          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {matches.slice(0, 6).map((match) => {
-              return <MatchCard key={match.match_id} match={match} />;
-            })}
-          </div>
+          {matches.length === 0 ? (
+            <p className="mt-6 text-neutral-400">No recent matches available</p>
+          ) : (
+            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {matches.slice(0, 6).map((match) => {
+                return <MatchCard key={match.match_id} match={match} />;
+              })}
+            </div>
+          )}
         </section>
       </div>
     </main>
