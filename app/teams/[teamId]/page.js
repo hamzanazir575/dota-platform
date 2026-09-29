@@ -1,3 +1,4 @@
+import { formatDate, formatDuration } from '@/app/_lib/format';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -41,17 +42,6 @@ async function getTeamMatches(teamId) {
   }
 
   return response.json();
-}
-
-function formatDuration(seconds) {
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-
-  return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
-}
-
-function formatDate(timestamp) {
-  return new Date(timestamp * 1000).toLocaleDateString();
 }
 
 export default async function TeamPage({ params }) {

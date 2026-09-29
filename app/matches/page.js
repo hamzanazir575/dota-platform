@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { formatDate, formatDuration } from '../_lib/format';
 
 export default async function MatchesPage() {
   const response = await fetch('https://api.opendota.com/api/proMatches');
@@ -8,17 +9,6 @@ export default async function MatchesPage() {
   }
 
   const matches = await response.json();
-
-  function formatDuration(seconds) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-
-    return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
-  }
-
-  function formatDate(timestamp) {
-    return new Date(timestamp * 1000).toLocaleDateString();
-  }
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white sm:px-8">

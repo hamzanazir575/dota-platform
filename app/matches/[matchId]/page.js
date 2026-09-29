@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { heroImages } from '@/app/_lib/hero-images';
 import MatchPlayerRow from '@/app/_components/MatchPlayerRow';
+import { formatDate, formatDuration } from '@/app/_lib/format';
 
 async function getMatch(matchId) {
   const response = await fetch(
@@ -50,25 +51,6 @@ async function getItemIds() {
   }
 
   return response.json();
-}
-
-function formatDuration(seconds) {
-  if (!seconds) {
-    return 'Unknown';
-  }
-
-  const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
-
-  return `${minutes}:${String(remainingSeconds).padStart(2, '0')}`;
-}
-
-function formatDate(timestamp) {
-  if (!timestamp) {
-    return 'Unknown date';
-  }
-
-  return new Date(timestamp * 1000).toLocaleDateString();
 }
 
 export default async function MatchPage({ params }) {
@@ -223,7 +205,7 @@ export default async function MatchPage({ params }) {
 
             <div className="bg-neutral-900 p-6 text-center">
               <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
-                Game Mode
+                Games Played
               </p>
 
               <p className="mt-2 text-xl font-bold">
@@ -268,7 +250,7 @@ export default async function MatchPage({ params }) {
                 <span className="text-center">Net Worth</span>
               </div>
 
-              <div className="bg-green-950/10">
+              <div className="bg-green-950/10 mb-4">
                 <div className="border-b border-neutral-800 bg-green-950/20 px-4 py-3">
                   <p className="text-sm font-bold text-green-400">
                     Radiant — {match.radiant_name || 'Radiant'}
