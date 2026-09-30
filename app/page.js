@@ -5,6 +5,8 @@ import { heroImages } from './_lib/hero-images';
 import MatchCard from './_components/MatchCard';
 import PlayerCard from './_components/PlayerCard';
 import TeamCard from './_components/TeamCard';
+import HomeSectionHeader from './_components/HomeSectionHeader';
+import HomeCardGrid from './_components/HomeCardGrid';
 
 const featuredNames = ['Troll Warlord', 'Chaos Knight', 'Rubick', 'Arc Warden'];
 const featuredHeroes = heroes.filter((hero) =>
@@ -85,74 +87,38 @@ export default async function Home() {
           </div>
         </section>
         <section className="mt-16 text-left">
-          <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-semibold text-red-300 mb-4">
-              Recent Matches
-            </h2>
-            <Link
-              href="/matches"
-              className="mb-4 inline-block text-red-400 font-bold hover:text-red-300 transition-colors"
-            >
-              View all →
-            </Link>
-          </div>
+          <HomeSectionHeader title="Recent Matches" href="/matches" />
 
-          {matches.length === 0 ? (
-            <p className="mt-6 text-neutral-400">No recent matches available</p>
-          ) : (
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {matches.slice(0, 6).map((match) => {
-                return <MatchCard key={match.match_id} match={match} />;
-              })}
-            </div>
-          )}
+          <HomeCardGrid
+            items={matches}
+            emptyMessage="No recent matches available"
+            getKey={(match) => match.match_id}
+            limit={6}
+            renderItem={(match) => <MatchCard match={match} />}
+          />
         </section>
         <section className="mt-16 text-left">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-red-300 mb-4">
-              Top Professional Players
-            </h2>
-            <Link
-              href="/players"
-              className="mb-4 inline-block text-red-400 font-bold hover:text-red-300 transition-colors"
-            >
-              View all →
-            </Link>
-          </div>
+          <HomeSectionHeader title="Top Professional Players" href="/players" />
 
-          {players.length === 0 ? (
-            <p className="mt-6 text-neutral-400">No player data available</p>
-          ) : (
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {players.slice(0, 6).map((player) => (
-                <PlayerCard key={player.account_id} player={player} />
-              ))}
-            </div>
-          )}
+          <HomeCardGrid
+            items={players}
+            emptyMessage="No player data available"
+            getKey={(player) => player.account_id}
+            limit={6}
+            renderItem={(player) => <PlayerCard player={player} />}
+          />
         </section>
 
         <section className="mt-16 text-left">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-red-300 mb-4">
-              Top Professional Teams
-            </h2>
-            <Link
-              href="/teams"
-              className="mb-4 inline-block text-red-400 font-bold hover:text-red-300 transition-colors"
-            >
-              View all →
-            </Link>
-          </div>
+          <HomeSectionHeader title="Top Professional Teams" href="/teams" />
 
-          {teams.length === 0 ? (
-            <p className="mt-6 text-neutral-400">No team data available</p>
-          ) : (
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {teams.slice(0, 6).map((team) => (
-                <TeamCard key={team.team_id} team={team} />
-              ))}
-            </div>
-          )}
+          <HomeCardGrid
+            items={teams}
+            emptyMessage="No team data available"
+            getKey={(team) => team.team_id}
+            limit={6}
+            renderItem={(team) => <TeamCard team={team} />}
+          />
         </section>
       </div>
     </main>
