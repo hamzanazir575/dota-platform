@@ -11,6 +11,7 @@ const navLinks = [
   { name: 'Matches', href: '/matches' },
   { name: 'Teams', href: '/teams' },
   { name: 'Tournaments', href: '/tournaments' },
+  { name: 'Items', href: '/items' },
 ];
 
 export default async function Navbar() {
