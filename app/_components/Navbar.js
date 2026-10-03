@@ -12,6 +12,7 @@ const navLinks = [
   { name: 'Teams', href: '/teams' },
   { name: 'Tournaments', href: '/tournaments' },
   { name: 'Items', href: '/items' },
+  { name: 'Meta Heroes', href: '/meta' },
 ];
 
 export default async function Navbar() {
