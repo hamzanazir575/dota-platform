@@ -1,4 +1,3 @@
-import MetaHeroCard from '../_components/MetaHeroCard';
 import MetaHeroList from '../_components/MetaHeroList';
 import { heroImages } from '../_lib/hero-images';
 
@@ -11,6 +10,15 @@ async function getHeroStats() {
   return response.json();
 }
 
+const HERO_NAME_OVERRIDES = {
+  'Outworld Devourer': 'Outworld Destroyer',
+  'Ring Master': 'Ringmaster',
+};
+
+function normalizeHeroName(name) {
+  return HERO_NAME_OVERRIDES[name] ?? name;
+}
+
 export default async function HeroMeta() {
   const heroStats = await getHeroStats();
 
@@ -18,14 +26,6 @@ export default async function HeroMeta() {
     (total, hero) => total + hero.pro_pick,
     0,
   );
-
-  const HERO_NAME_OVERRIDES = {
-    'Outworld Devourer': 'Outworld Destroyer',
-  };
-
-  function normalizeHeroName(name) {
-    return HERO_NAME_OVERRIDES[name] ?? name;
-  }
 
   const metaHeroes = heroStats.map((hero) => {
     const name = normalizeHeroName(hero.localized_name);
@@ -35,10 +35,16 @@ export default async function HeroMeta() {
       image: heroImages[name],
       pickRate: (hero.pro_pick / totalProPicks) * 100,
       winRate: hero.pro_pick > 0 ? (hero.pro_win / hero.pro_pick) * 100 : 0,
+      proPicks: hero.pro_pick,
+      roles: hero.roles,
     };
   });
 
   metaHeroes.sort((a, b) => b.pickRate - a.pickRate);
+
+  const availableRoles = [
+    ...new Set(metaHeroes.flatMap((hero) => hero.roles)),
+  ].sort();
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white sm:px-8">
@@ -51,11 +57,11 @@ export default async function HeroMeta() {
             Hero Meta Dashboard
           </h1>
           <p className="mt-3 max-w-2xl text-neutral-400">
-            Professional pick rates, ranked highest to lowest.
+            Professional pick rates, highest to lowest.
           </p>
         </div>
 
-        <MetaHeroList heroes={metaHeroes} />
+        <MetaHeroList heroes={metaHeroes} availableRoles={availableRoles} />
       </div>
     </main>
   );
