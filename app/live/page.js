@@ -1,4 +1,5 @@
-import LiveMatchCard from '../_components/LiveMatchCard';
+import LiveMatchList from '../_components/LiveMatchList';
+import { transformLiveMatches } from '@/lib/live-matches';
 
 // TEMPORARY — stand-in data so you can see LiveMatchCard render before
 // a real pro match happens to be live. Delete this whole block, and the
@@ -68,21 +69,7 @@ export default async function LiveMatches() {
     getHeroes(),
   ]);
 
-  const leagueNames = new Map(
-    leagues.map((league) => [league.leagueid, league.name]),
-  );
-
-  const proLiveMatches = liveMatches
-    .filter((match) => match.league_id !== 0)
-    .map((match) => ({
-      ...match,
-      leagueName: leagueNames.get(match.league_id) || 'Unknown League',
-    }));
-
-  //   const displayMatches =
-  //     proLiveMatches.length > 0 ? proLiveMatches : [FAKE_LIVE_MATCH];
-
-  const displayMatches = proLiveMatches;
+  const proLiveMatches = transformLiveMatches(liveMatches, leagues);
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white sm:px-8">
@@ -97,22 +84,11 @@ export default async function LiveMatches() {
           </p>
         </div>
 
-        {displayMatches.length === 0 ? (
-          <p className="mt-6 text-neutral-400">
-            No professional matches are live right now — check back during a
-            tournament.
-          </p>
-        ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {displayMatches.map((match) => (
-              <LiveMatchCard
-                key={match.match_id}
-                match={match}
-                heroes={heroes}
-              />
-            ))}
-          </div>
-        )}
+        <LiveMatchList
+          initialMatches={proLiveMatches}
+          heroes={heroes}
+          leagues={leagues}
+        />
       </div>
     </main>
   );

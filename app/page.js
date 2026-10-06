@@ -66,7 +66,7 @@ export default async function Home() {
 
         <Link
           href="/heroes"
-          className="mt-8 inline-block text-red-400 hover:text-red-300 text-2xl font-semibold transition-colors"
+          className="mt-8 inline-block text-red-400 hover:text-red-300 hover:-translate-y-1 text-2xl font-semibold transition-all"
         >
           See all heroes →
         </Link>

@@ -9,6 +9,7 @@ const navLinks = [
   { name: 'Heroes', href: '/heroes' },
   { name: 'Players', href: '/players' },
   { name: 'Matches', href: '/matches' },
+  { name: 'Live', href: '/live' },
   { name: 'Teams', href: '/teams' },
   { name: 'Tournaments', href: '/tournaments' },
   { name: 'Items', href: '/items' },
