@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { heroImages } from '@/app/_lib/hero-images';
 import MatchPlayerRow from '@/app/_components/MatchPlayerRow';
-import { formatDate, formatDuration } from '@/app/_lib/format';
+import { formatDate, formatDuration, formatGoldLead } from '@/app/_lib/format';
 
 async function getMatch(matchId) {
   const response = await fetch(
@@ -95,6 +95,7 @@ export default async function MatchPage({ params }) {
   }
 
   const radiantWon = match.radiant_win;
+  const finalGoldAdvantage = match.radiant_gold_adv?.at(-1) ?? 0;
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white sm:px-8">
@@ -192,7 +193,7 @@ export default async function MatchPage({ params }) {
             </div>
           </div>
 
-          <div className="grid gap-px bg-neutral-800 sm:grid-cols-3">
+          <div className="grid gap-px bg-neutral-800 sm:grid-cols-2 lg:gird-cols-4">
             <div className="bg-neutral-900 p-6 text-center">
               <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
                 Duration
@@ -220,6 +221,17 @@ export default async function MatchPage({ params }) {
 
               <p className="mt-2 text-xl font-bold">
                 {match.series_id ?? 'N/A'}
+              </p>
+            </div>
+
+            <div className="bg-neutral-900 p-6 text-center">
+              <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
+                {' '}
+                Final Gold Advantage
+              </p>
+
+              <p className="mt-2 text-xl font-bold text-amber-200">
+                {formatGoldLead(finalGoldAdvantage)}
               </p>
             </div>
           </div>

@@ -74,6 +74,7 @@ export const heroImages = {
   Invoker: '/images/heroes/invoker.png',
   Silencer: '/images/heroes/silencer.png',
   'Outworld Destroyer': '/images/heroes/obsidian_destroyer.png',
+  'Outworld Devourer': '/images/heroes/obsidian_destroyer.png',
   Lycan: '/images/heroes/lycan.png',
   Brewmaster: '/images/heroes/brewmaster.png',
   'Shadow Demon': '/images/heroes/shadow_demon.png',

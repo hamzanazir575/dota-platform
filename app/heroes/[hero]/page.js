@@ -9,6 +9,29 @@ import { heroStats } from '@/app/_lib/hero-stats';
 import HeroStats from '@/app/_components/HeroStats';
 import { talents } from '@/app/_lib/talents';
 import TalentTree from '@/app/_components/TalentTree';
+import { normalizeHeroName } from '@/app/_lib/hero-name-overrides';
+import HeroMatchups from '@/app/_components/HeroMatchups';
+
+async function getHeroes() {
+  const response = await fetch('https://api.opendota.com/api/constants/heroes');
+
+  if (!response.ok) {
+    return {};
+  }
+
+  return response.json();
+}
+async function getHeroMatchups(heroId) {
+  const response = await fetch(
+    `https://api.opendota.com/api/heroes/${heroId}/matchups`,
+  );
+
+  if (!response.ok) {
+    return [];
+  }
+
+  return response.json();
+}
 
 export default async function HeroPage({ params }) {
   const { hero: heroSlug } = await params;
@@ -21,19 +44,74 @@ export default async function HeroPage({ params }) {
     notFound();
   }
 
+  const openDotaHeroes = await getHeroes();
+
+  const heroIdByName = new Map(
+    Object.values(openDotaHeroes).map((hero) => [
+      normalizeHeroName(hero.localized_name),
+      hero.id,
+    ]),
+  );
+
+  const heroById = new Map(
+    Object.values(openDotaHeroes).map((hero) => [
+      hero.id,
+      normalizeHeroName(hero.localized_name),
+    ]),
+  );
+
+  const openDotaHeroId = heroIdByName.get(currentHero.name);
+
+  const HERO_DATA_FALLBACKS = {
+    'Outworld Destroyer': 'Outworld Devourer',
+    Ringmaster: 'Ring Master',
+  };
+
+  const heroMatchups = openDotaHeroId
+    ? await getHeroMatchups(openDotaHeroId)
+    : [];
+
+  const matchupData = heroMatchups.map((matchup) => {
+    const opponentName = heroById.get(matchup.hero_id);
+
+    return {
+      id: matchup.hero_id,
+      name: opponentName,
+      image: heroImages[opponentName],
+      gamesPlayed: matchup.games_played,
+      winRate: matchup.games_played
+        ? (matchup.wins / matchup.games_played) * 100
+        : 0,
+    };
+  });
+
+  const reliableMatchups = matchupData.filter(
+    (matchup) => matchup.gamesPlayed >= 25,
+  );
+
+  const strongestMatchups = [...reliableMatchups].sort(
+    (a, b) => b.winRate - a.winRate,
+  );
+
+  const weakestMatchups = [...reliableMatchups].sort(
+    (a, b) => a.winRate - b.winRate,
+  );
+
   const image = heroImages[currentHero.name];
   const currentAbilities = abilities[currentHero.name] ?? [];
-  const currentStats = heroStats[currentHero.name] ?? {
-    primaryAttribute: 'Universal',
-    attackType: 'Unknown',
-    roles: [],
-  };
-  const currentTalents = talents[currentHero.name] ?? {
-    level10: [],
-    level15: [],
-    level20: [],
-    level25: [],
-  };
+  const currentStats = heroStats[currentHero.name] ??
+    heroStats[HERO_DATA_FALLBACKS[currentHero.name]] ?? {
+      primaryAttribute: 'Universal',
+      attackType: 'Unknown',
+      roles: [],
+    };
+  const currentTalents = talents[currentHero.name] ??
+    talents[HERO_DATA_FALLBACKS[currentHero.name]] ?? {
+      level10: [],
+      level15: [],
+      level20: [],
+      level25: [],
+    };
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white sm:px-8">
@@ -102,6 +180,11 @@ export default async function HeroPage({ params }) {
               <AbilityCard key={`${ability.name}-${index}`} ability={ability} />
             ))}
           </div>
+
+          <HeroMatchups
+            strongestMatchups={strongestMatchups}
+            weakestMatchups={weakestMatchups}
+          />
         </section>
       </div>
     </main>

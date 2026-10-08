@@ -1,16 +1,6 @@
 import Link from 'next/link';
-import { formatDuration } from '../_lib/format';
+import { formatDuration, formatGoldLead } from '../_lib/format';
 import { heroImages } from '../_lib/hero-images';
-
-function formatGoldLead(radiantLead) {
-  if (radiantLead === 0) return 'Even gold';
-
-  const leadingTeam = radiantLead > 0 ? 'Radiant' : 'Dire';
-  const amount = Math.abs(radiantLead);
-  const formatted = amount >= 1000 ? `${(amount / 1000).toFixed(1)}k` : amount;
-
-  return `${leadingTeam} +${formatted}g`;
-}
 
 function getHeroInfo(heroes, heroId) {
   const hero = heroes[String(heroId)];

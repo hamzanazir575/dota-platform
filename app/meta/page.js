@@ -1,5 +1,6 @@
 import MetaHeroList from '../_components/MetaHeroList';
 import { heroImages } from '../_lib/hero-images';
+import { normalizeHeroName } from '../_lib/hero-name-overrides';
 
 async function getHeroStats() {
   const response = await fetch('https://api.opendota.com/api/heroStats');
@@ -8,15 +9,6 @@ async function getHeroStats() {
     return [];
   }
   return response.json();
-}
-
-const HERO_NAME_OVERRIDES = {
-  'Outworld Devourer': 'Outworld Destroyer',
-  'Ring Master': 'Ringmaster',
-};
-
-function normalizeHeroName(name) {
-  return HERO_NAME_OVERRIDES[name] ?? name;
 }
 
 export default async function HeroMeta() {

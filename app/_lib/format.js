@@ -16,3 +16,13 @@ export function formatDate(timestamp) {
 
   return new Date(timestamp * 1000).toLocaleDateString();
 }
+
+export function formatGoldLead(radiantLead) {
+  if (radiantLead === 0) return 'Even gold';
+
+  const leadingTeam = radiantLead > 0 ? 'Radiant:' : 'Dire:';
+  const amount = Math.abs(radiantLead);
+  const formatted = amount >= 1000 ? `${(amount / 1000).toFixed(1)}k` : amount;
+
+  return `${leadingTeam} +${formatted} gold`;
+}
