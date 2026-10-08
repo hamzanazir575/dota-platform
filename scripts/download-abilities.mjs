@@ -7,6 +7,7 @@ import {
   hero_abilities,
   abilities as abilityData,
 } from 'dotaconstants';
+import { normalizeHeroName } from '../app/_lib/hero-name-overrides.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -172,7 +173,7 @@ async function downloadAbilities() {
     }
 
     if (heroAbilities.length > 0) {
-      result[hero.localized_name] = heroAbilities;
+      result[normalizeHeroName(hero.localized_name)] = heroAbilities;
     }
 
     console.log(`  Added ${heroAbilities.length} abilities`);

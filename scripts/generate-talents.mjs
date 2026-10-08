@@ -8,6 +8,7 @@ import {
   hero_abilities,
   abilities as abilityData,
 } from 'dotaconstants';
+import { normalizeHeroName } from '../app/_lib/hero-name-overrides.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -328,7 +329,7 @@ async function generateTalents() {
     );
 
     if (talentCount > 0) {
-      result[hero.localized_name] = heroTalents;
+      result[normalizeHeroName(hero.localized_name)] = heroTalents;
     }
 
     console.log(`  ${hero.localized_name}: ${talentCount} talents`);

@@ -1943,7 +1943,7 @@ export const talents = {
         tier: 4,
       },
       {
-        name: 'x2.5x Plague Ward HP/Damage',
+        name: 'Xx Plague Ward HP/Damage',
         id: 'special_bonus_unique_venomancer',
         tier: 4,
       },
@@ -2416,11 +2416,6 @@ export const talents = {
       {
         name: '+45 Shadow Wave Heal / Damage',
         id: 'special_bonus_unique_dazzle_2',
-        tier: 2,
-      },
-      {
-        name: '+80 Attack Speed',
-        id: 'manual_dazzle_15_left',
         tier: 2,
       },
     ],
@@ -3202,11 +3197,6 @@ export const talents = {
   Chen: {
     level10: [
       {
-        name: '+25% Zealot Health/Damage',
-        id: 'manual_chen_10_left',
-        tier: 1,
-      },
-      {
         name: '+75 Penitence Damage',
         id: 'special_bonus_unique_chen_11',
         tier: 1,
@@ -3664,11 +3654,6 @@ export const talents = {
     ],
     level15: [
       {
-        name: '+2s/1s Arcane Curse Base/Penalty Duration',
-        id: 'special_bonus_unique_silencer_7',
-        tier: 2,
-      },
-      {
         name: '-15s Global Silence Cooldown',
         id: 'special_bonus_unique_silencer_7',
         tier: 2,
@@ -3699,7 +3684,7 @@ export const talents = {
       },
     ],
   },
-  'Outworld Devourer': {
+  'Outworld Destroyer': {
     level10: [
       {
         name: '+100 Astral Imprisonment Cast Range',
@@ -4140,11 +4125,6 @@ export const talents = {
       {
         name: '+10% Multicast Chance',
         id: 'special_bonus_unique_ogre_magi_multicast_chance',
-        tier: 4,
-      },
-      {
-        name: '17% Fireblast chance on attack',
-        id: 'manual_ogre_magi_25_right',
         tier: 4,
       },
     ],
@@ -6008,7 +5988,7 @@ export const talents = {
       },
       {
         name: '+1 Impalement Arts Charge',
-        id: 'manual_ringmaster_10_right',
+        id: 'special_bonus_unique_ringmaster_dagger_charge',
         tier: 1,
       },
     ],
@@ -6142,11 +6122,6 @@ export const talents = {
         id: 'special_bonus_unique_primal_beast_pulverize_duration',
         tier: 4,
       },
-      {
-        name: 'Colossal 2x Bonuses During Trample',
-        id: 'manual_primal_beast_25_right',
-        tier: 4,
-      },
     ],
   },
   Muerta: {
@@ -6180,24 +6155,8 @@ export const talents = {
         id: 'special_bonus_unique_muerta_the_calling_num_revenants',
         tier: 3,
       },
-      {
-        name: '+2s Pierce the Veil Duration',
-        id: 'manual_muerta_20_right',
-        tier: 3,
-      },
     ],
-    level25: [
-      {
-        name: '2 Dead Shot Charges',
-        id: 'manual_muerta_25_left',
-        tier: 4,
-      },
-      {
-        name: '+20% Gunslinger chance',
-        id: 'manual_muerta_25_right',
-        tier: 4,
-      },
-    ],
+    level25: [],
   },
   Kez: {
     level10: [
@@ -6245,156 +6204,6 @@ export const talents = {
       {
         name: '+1 Echo Slash Attack',
         id: 'special_bonus_unique_kez_echo_slash_strike_count',
-        tier: 4,
-      },
-    ],
-  },
-  'Ring Master': {
-    level10: [
-      {
-        name: '+75 Tame the Beasts Radius',
-        id: 'manual_ringmaster_10_left',
-        tier: 1,
-      },
-      {
-        name: '+1 Impalement Arts Charge',
-        id: 'manual_ringmaster_10_right',
-        tier: 1,
-      },
-    ],
-    level15: [
-      {
-        name: 'Debuff Immunity While Channeling Tame the Beasts',
-        id: 'manual_ringmaster_15_left',
-        tier: 2,
-      },
-      {
-        name: 'Impalement Arts Penetrates One Target',
-        id: 'manual_ringmaster_15_right',
-        tier: 2,
-      },
-    ],
-    level20: [
-      {
-        name: '+75/+300 Tame the Beasts Min/Max Damage',
-        id: 'manual_ringmaster_20_left',
-        tier: 3,
-      },
-      {
-        name: '+1s Impalement Arts Bleed and Slow Duration',
-        id: 'manual_ringmaster_20_right',
-        tier: 3,
-      },
-    ],
-    level25: [
-      {
-        name: 'Escape Act Grants Strong Dispel and Flying',
-        id: 'manual_ringmaster_25_left',
-        tier: 4,
-      },
-      {
-        name: '+150 Wheel of Wonder Radius and Range',
-        id: 'manual_ringmaster_25_right',
-        tier: 4,
-      },
-    ],
-  },
-  Dawnbreaker: {
-    level10: [
-      {
-        name: 'Celestial Hammer Trail Grants Movement Speed to Allies',
-        id: 'manual_dawnbreaker_10_left',
-        tier: 1,
-      },
-      {
-        name: '+25% Luminosity Critical Strike Damage',
-        id: 'manual_dawnbreaker_10_right',
-        tier: 1,
-      },
-    ],
-    level15: [
-      {
-        name: '-20s Solar Guardian Cooldown',
-        id: 'manual_dawnbreaker_15_left',
-        tier: 2,
-      },
-      {
-        name: '+40% Celestial Hammer Trail/Hammer Damage',
-        id: 'manual_dawnbreaker_15_right',
-        tier: 2,
-      },
-    ],
-    level20: [
-      {
-        name: '-1 Luminosity Attacks Required',
-        id: 'manual_dawnbreaker_20_left',
-        tier: 3,
-      },
-      {
-        name: '+150 Solar Guardian Radius',
-        id: 'manual_dawnbreaker_20_right',
-        tier: 3,
-      },
-    ],
-    level25: [
-      {
-        name: '+80% Celestial Hammer Cast Range/Speed',
-        id: 'manual_dawnbreaker_25_left',
-        tier: 4,
-      },
-      {
-        name: '-4s Starbreaker Cooldown',
-        id: 'manual_dawnbreaker_25_right',
-        tier: 4,
-      },
-    ],
-  },
-  Largo: {
-    level10: [
-      {
-        name: '2.5x Catchy Lick Health Regen',
-        id: 'manual_largo_10_left',
-        tier: 1,
-      },
-      {
-        name: '+15 Frogstomp Damage',
-        id: 'manual_largo_10_right',
-        tier: 1,
-      },
-    ],
-    level15: [
-      {
-        name: '+100 Catchy Lick Cast Range / +50 Pull Distance',
-        id: 'manual_largo_15_left',
-        tier: 2,
-      },
-      {
-        name: '1% Croak of Genius Max Health DPS',
-        id: 'manual_largo_15_right',
-        tier: 2,
-      },
-    ],
-    level20: [
-      {
-        name: "50% Groovin' Armor Aura",
-        id: 'manual_largo_20_left',
-        tier: 3,
-      },
-      {
-        name: '2 Catchy Lick Charges',
-        id: 'manual_largo_20_right',
-        tier: 3,
-      },
-    ],
-    level25: [
-      {
-        name: '2x Frogstomp Stomps/Interval',
-        id: 'manual_largo_25_left',
-        tier: 4,
-      },
-      {
-        name: '+30% Amphibian Rhapsody Song Effects',
-        id: 'manual_largo_25_right',
         tier: 4,
       },
     ],

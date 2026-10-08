@@ -98,7 +98,10 @@ export default async function HeroPage({ params }) {
   );
 
   const image = heroImages[currentHero.name];
-  const currentAbilities = abilities[currentHero.name] ?? [];
+  const currentAbilities =
+    abilities[currentHero.name] ??
+    abilities[HERO_DATA_FALLBACKS[currentHero.NAME]] ??
+    [];
   const currentStats = heroStats[currentHero.name] ??
     heroStats[HERO_DATA_FALLBACKS[currentHero.name]] ?? {
       primaryAttribute: 'Universal',

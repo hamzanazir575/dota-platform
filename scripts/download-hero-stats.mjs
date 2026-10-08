@@ -1,3 +1,4 @@
+import { normalizeHeroName } from '../app/_lib/hero-name-overrides.js';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -33,7 +34,7 @@ async function downloadHeroStats() {
     const attackMin = hero.base_attack_min ?? 0;
     const attackMax = hero.base_attack_max ?? 0;
 
-    heroStats[hero.localized_name] = {
+    heroStats[normalizeHeroName(hero.localized_name)] = {
       primaryAttribute: attributeNames[hero.primary_attr] ?? hero.primary_attr,
 
       attackType: hero.attack_type,

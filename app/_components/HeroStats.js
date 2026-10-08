@@ -8,6 +8,15 @@ export default function HeroStats({ stats }) {
     Universal: '/images/attributes/hero_universal.png',
   };
 
+  const attributeLabels = {
+    all: 'Universal',
+  };
+
+  const primaryAttribute =
+    attributeLabels[stats.primaryAttribute] ?? stats.primaryAttribute;
+
+  const attributeIcon = attributeIcons[primaryAttribute];
+
   return (
     <section className="mt-12">
       <h2 className="text-3xl font-bold">Hero Overview</h2>
@@ -19,16 +28,16 @@ export default function HeroStats({ stats }) {
           </p>
 
           <div className="mt-4 flex items-center gap-3">
-            <Image
-              src={attributeIcons[stats.primaryAttribute]}
-              alt={stats.primaryAttribute}
-              width={40}
-              height={40}
-            />
+            {attributeIcon && (
+              <Image
+                src={attributeIcon}
+                alt={primaryAttribute}
+                width={40}
+                height={40}
+              />
+            )}
 
-            <p className="text-2xl font-bold text-white">
-              {stats.primaryAttribute}
-            </p>
+            <p className="text-2xl font-bold text-white">{primaryAttribute}</p>
           </div>
         </div>
 
