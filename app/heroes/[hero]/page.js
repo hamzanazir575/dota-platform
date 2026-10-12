@@ -11,6 +11,7 @@ import { talents } from '@/app/_lib/talents';
 import TalentTree from '@/app/_components/TalentTree';
 import { normalizeHeroName } from '@/app/_lib/hero-name-overrides';
 import HeroMatchups from '@/app/_components/HeroMatchups';
+import HeroDetails from '@/app/_components/HeroDetails';
 
 async function getHeroes() {
   const response = await fetch('https://api.opendota.com/api/constants/heroes');
@@ -100,7 +101,7 @@ export default async function HeroPage({ params }) {
   const image = heroImages[currentHero.name];
   const currentAbilities =
     abilities[currentHero.name] ??
-    abilities[HERO_DATA_FALLBACKS[currentHero.NAME]] ??
+    abilities[HERO_DATA_FALLBACKS[currentHero.name]] ??
     [];
   const currentStats = heroStats[currentHero.name] ??
     heroStats[HERO_DATA_FALLBACKS[currentHero.name]] ?? {
@@ -174,6 +175,7 @@ export default async function HeroPage({ params }) {
         </section>
 
         <HeroStats stats={currentStats} />
+        <HeroDetails stats={currentStats} />
         <TalentTree talents={currentTalents} />
         <section className="mt-12">
           <h2 className="text-3xl font-bold">Abilities</h2>
