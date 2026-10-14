@@ -6,7 +6,7 @@ export default function StatCard({ label, value, detail }) {
       </p>
 
       <p className="mt-3 text-2xl font-bold text-white">{value}</p>
-      {detail && <span className="mt-2 text-sm text-green-400">{detail}</span>}
+      {detail && <p className="mt-2 text-sm text-green-400">{detail}</p>}
     </div>
   );
 }

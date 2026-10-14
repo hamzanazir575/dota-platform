@@ -709,13 +709,13 @@ export const heroes = [
   },
   {
     name: 'Outworld Destroyer',
-    role: 'Universal • Mid',
+    role: 'Intelligence • Mid',
     description:
       'A mid hero whose spells deal damage based on his intelligence stat.',
   },
   {
     name: 'Ringmaster',
-    role: 'Universal • Support',
+    role: 'Intelligence • Support',
     description:
       'A supporting showman whose acts buff allies and disrupt enemies mid-fight.',
   },

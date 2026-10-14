@@ -88,24 +88,15 @@ export default function HeroDetails({ stats }) {
       <h2 className="text-3xl font-bold">Detailed Hero Stats</h2>
 
       <div className="mt-5 grid gap-4 md:grid-cols-3">
-        {attributes.map((attribute) => (
-          <div
+        {attributes.map((attribute) => {
+          <StatCard
             key={attribute.name}
-            className="rounded-2xl border border-neutral-800 bg-neutral-900 p-5 shadow-lg"
-          >
-            <p className="text-sm font-semibold uppercase tracking-wider text-neutral-400">
-              {attribute.name}
-            </p>
-
-            <p className="mt-3 text-3xl font-bold text-white">
-              {attribute.value}
-            </p>
-
-            <p className="mt-2 text-sm text-green-400">
-              +{attribute.growth} per level
-            </p>
-          </div>
-        ))}
+            label={attribute.name}
+            value={attribute.value}
+            detail={`+${attribute.growth} per level`}
+          />;
+          return;
+        })}
       </div>
 
       <StatGroup title="Combat Stats" stats={combatStats} />
