@@ -87,22 +87,20 @@ export default function HeroDetails({ stats }) {
     <section className="mt-12">
       <h2 className="text-3xl font-bold">Detailed Hero Stats</h2>
 
+      <h3 className="mt-10 text-2xl font-semibold">Attributes</h3>
       <div className="mt-5 grid gap-4 md:grid-cols-3">
-        {attributes.map((attribute) => {
+        {attributes.map((attribute) => (
           <StatCard
             key={attribute.name}
             label={attribute.name}
             value={attribute.value}
             detail={`+${attribute.growth} per level`}
-          />;
-          return;
-        })}
+          />
+        ))}
       </div>
 
       <StatGroup title="Combat Stats" stats={combatStats} />
-
       <StatGroup title="Mobility Stats" stats={mobilityStats} />
-
       <StatGroup title="Health & Mana" stats={healthManaStats} />
     </section>
   );

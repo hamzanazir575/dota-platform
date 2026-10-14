@@ -33,12 +33,25 @@ const CDN_BASE_URL = 'https://cdn.cloudflare.steamstatic.com';
 const HERO_DATA_URL =
   'https://www.dota2.com/datafeed/herodata?language=english&hero_id=';
 
+const HIDDEN_ABILITY_IDS = new Set(['ringmaster_tame_the_beasts_crack']);
+
+const RINGMASTER_SOUVENIR_ABILITY_IDS = new Set([
+  'ringmaster_funhouse_mirror',
+  'ringmaster_strongman_tonic',
+  'ringmaster_whoopee_cushion',
+  'ringmaster_summon_unicycle',
+]);
+
 function formatValues(values) {
-  if (!Array.isArray(values) || values.length === 0) {
+  if (values === undefined || values === null || values === '') {
     return '';
   }
 
-  return values.join(' / ');
+  if (Array.isArray(values)) {
+    return values.length > 0 ? values.join(' / ') : '';
+  }
+
+  return String(values);
 }
 
 async function downloadAbilities() {
@@ -82,7 +95,23 @@ async function downloadAbilities() {
 
     const heroAbilities = [];
 
-    for (const abilityId of heroAbilityData.abilities) {
+    const additionalAbilityIds =
+      hero.localized_name === 'Ringmaster'
+        ? (heroAbilityData.talents ?? [])
+            .map((talent) => talent.name)
+            .filter((abilityId) =>
+              RINGMASTER_SOUVENIR_ABILITY_IDS.has(abilityId),
+            )
+        : [];
+
+    const abilityIds = [
+      ...heroAbilityData.abilities.filter(
+        (abilityId) => !HIDDEN_ABILITY_IDS.has(abilityId),
+      ),
+      ...additionalAbilityIds,
+    ];
+
+    for (const abilityId of abilityIds) {
       if (typeof abilityId !== 'string') {
         continue;
       }
@@ -157,9 +186,12 @@ async function downloadAbilities() {
         }
       }
 
-      const manaCost = formatValues(valveAbility?.mana_costs);
+      const manaCost =
+        formatValues(valveAbility?.mana_costs) ||
+        formatValues(staticAbility.mc);
 
-      const cooldown = formatValues(valveAbility?.cooldowns);
+      const cooldown =
+        formatValues(valveAbility?.cooldowns) || formatValues(staticAbility.cd);
 
       heroAbilities.push({
         name: staticAbility.dname,
@@ -169,6 +201,7 @@ async function downloadAbilities() {
         description: staticAbility.desc ?? '',
         manaCost,
         cooldown,
+        attributes: staticAbility.attrib ?? [],
       });
     }
 

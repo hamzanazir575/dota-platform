@@ -180,7 +180,7 @@ export default async function HeroPage({ params }) {
         <section className="mt-12">
           <h2 className="text-3xl font-bold">Abilities</h2>
 
-          <div className="mt-6 grid gap-6 lg:grid-cols-2">
+          <div className="mt-6 columns-1 gap-6 lg:columns-2">
             {currentAbilities.map((ability, index) => (
               <AbilityCard key={`${ability.name}-${index}`} ability={ability} />
             ))}

@@ -2,8 +2,8 @@ import Image from 'next/image';
 
 export default function AbilityCard({ ability }) {
   return (
-    <article className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 p-5 shadow-lg">
-      <div className="flex flex-wrap items-center gap-3">
+    <article className="mb-6 break-inside-avoid overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 p-5 shadow-lg">
+      <div className="flex flex-wrap items-center justify-center gap-3">
         <h3 className="text-xl font-bold text-white">{ability.name}</h3>
 
         {ability.isInnate && (
@@ -19,8 +19,8 @@ export default function AbilityCard({ ability }) {
         )}
       </div>
 
-      <div className="mt-5 grid gap-6 md:grid-cols-[200px_1fr]">
-        <div className="flex justify-center md:block">
+      <div className="mt-5 space-y-6">
+        <div className="flex justify-center">
           {ability.image ? (
             <Image
               src={ability.image}
@@ -38,6 +38,47 @@ export default function AbilityCard({ ability }) {
 
         <div className="space-y-4">
           <p className="leading-7 text-neutral-300">{ability.description}</p>
+
+          {ability.attributes?.some(
+            (attribute) =>
+              attribute.header &&
+              attribute.value !== undefined &&
+              attribute.value !== null &&
+              attribute.value !== '',
+          ) && (
+            <div className="mt-5 rounded-xl border border-neutral-800 bg-neutral-950/70 p-4">
+              <h4 className="text-sm font-bold uppercase tracking-wider text-red-400">
+                Ability Details
+              </h4>
+
+              <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+                {ability.attributes
+                  .filter(
+                    (attribute) =>
+                      attribute.header &&
+                      attribute.value !== undefined &&
+                      attribute.value !== null &&
+                      attribute.value !== '',
+                  )
+                  .map((attribute) => (
+                    <div
+                      key={attribute.key ?? attribute.header}
+                      className="rounded-lg bg-neutral-900 p-3"
+                    >
+                      <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-400">
+                        {attribute.header.replace(/:$/, '')}
+                      </dt>
+
+                      <dd className="mt-1 text-base font-semibold text-white">
+                        {Array.isArray(attribute.value)
+                          ? attribute.value.join(' / ')
+                          : attribute.value}
+                      </dd>
+                    </div>
+                  ))}
+              </dl>
+            </div>
+          )}
 
           {ability.manaCost && (
             <p className="text-sm text-neutral-400">
