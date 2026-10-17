@@ -1,6 +1,31 @@
 import Image from 'next/image';
 
+const HIDDEN_ATTRIBUTE_KEYS = new Set([
+  'tick_rate',
+  'aura_tick_interval',
+  'vision_cone',
+]);
+
+function hasUsefulValue(value) {
+  const values = Array.isArray(value) ? value : [value];
+
+  return values.some(
+    (item) =>
+      item !== null &&
+      item !== undefined &&
+      String(item).trim() !== '' &&
+      String(item).trim() !== '0',
+  );
+}
+
 export default function AbilityCard({ ability }) {
+  const visibleAttributes = (ability.attributes ?? []).filter(
+    (attribute) =>
+      attribute.header &&
+      !HIDDEN_ATTRIBUTE_KEYS.has(attribute.key) &&
+      hasUsefulValue(attribute.value),
+  );
+
   return (
     <article className="mb-6 break-inside-avoid overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 p-5 shadow-lg">
       <div className="flex flex-wrap items-center justify-center gap-3">
@@ -39,43 +64,29 @@ export default function AbilityCard({ ability }) {
         <div className="space-y-4">
           <p className="leading-7 text-neutral-300">{ability.description}</p>
 
-          {ability.attributes?.some(
-            (attribute) =>
-              attribute.header &&
-              attribute.value !== undefined &&
-              attribute.value !== null &&
-              attribute.value !== '',
-          ) && (
+          {visibleAttributes.length > 0 && (
             <div className="mt-5 rounded-xl border border-neutral-800 bg-neutral-950/70 p-4">
               <h4 className="text-sm font-bold uppercase tracking-wider text-red-400">
                 Ability Details
               </h4>
 
               <dl className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                {ability.attributes
-                  .filter(
-                    (attribute) =>
-                      attribute.header &&
-                      attribute.value !== undefined &&
-                      attribute.value !== null &&
-                      attribute.value !== '',
-                  )
-                  .map((attribute) => (
-                    <div
-                      key={attribute.key ?? attribute.header}
-                      className="rounded-lg bg-neutral-900 p-3"
-                    >
-                      <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-400">
-                        {attribute.header.replace(/:$/, '')}
-                      </dt>
+                {visibleAttributes.map((attribute) => (
+                  <div
+                    key={attribute.key ?? attribute.header}
+                    className="rounded-lg bg-neutral-900 p-3"
+                  >
+                    <dt className="text-xs font-semibold uppercase tracking-wide text-neutral-400">
+                      {attribute.header.replace(/:$/, '')}
+                    </dt>
 
-                      <dd className="mt-1 text-base font-semibold text-white">
-                        {Array.isArray(attribute.value)
-                          ? attribute.value.join(' / ')
-                          : attribute.value}
-                      </dd>
-                    </div>
-                  ))}
+                    <dd className="mt-1 text-base font-semibold text-white">
+                      {Array.isArray(attribute.value)
+                        ? attribute.value.join(' / ')
+                        : attribute.value}
+                    </dd>
+                  </div>
+                ))}
               </dl>
             </div>
           )}
