@@ -12,6 +12,8 @@ import TalentTree from '@/app/_components/TalentTree';
 import { normalizeHeroName } from '@/app/_lib/hero-name-overrides';
 import HeroMatchups from '@/app/_components/HeroMatchups';
 import HeroDetails from '@/app/_components/HeroDetails';
+import { aghanimUpgrades } from '@/app/_lib/aghanims-upgrades';
+import AghanimUpgrades from '@/app/_components/AghanimUpgrades';
 
 async function getHeroes() {
   const response = await fetch('https://api.opendota.com/api/constants/heroes');
@@ -117,6 +119,11 @@ export default async function HeroPage({ params }) {
       level25: [],
     };
 
+  const currentAghsUpgrades =
+    aghanimUpgrades[currentHero.name] ??
+    aghanimUpgrades[HERO_DATA_FALLBACKS[currentHero.name]] ??
+    null;
+
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-6xl">
@@ -177,6 +184,7 @@ export default async function HeroPage({ params }) {
         <HeroStats stats={currentStats} />
         <HeroDetails stats={currentStats} />
         <TalentTree talents={currentTalents} />
+        <AghanimUpgrades upgrades={currentAghsUpgrades} />
         <section className="mt-12">
           <h2 className="text-3xl font-bold">Abilities</h2>
 
