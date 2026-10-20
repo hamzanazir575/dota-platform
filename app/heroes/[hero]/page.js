@@ -14,6 +14,7 @@ import HeroMatchups from '@/app/_components/HeroMatchups';
 import HeroDetails from '@/app/_components/HeroDetails';
 import { aghanimUpgrades } from '@/app/_lib/aghanims-upgrades';
 import AghanimUpgrades from '@/app/_components/AghanimUpgrades';
+import HeroBuilds from '@/app/_components/HeroBuilds';
 
 async function getHeroes() {
   const response = await fetch('https://api.opendota.com/api/constants/heroes');
@@ -34,6 +35,44 @@ async function getHeroMatchups(heroId) {
   }
 
   return response.json();
+}
+
+async function getHeroItemPopularity(heroId) {
+  try {
+    const response = await fetch(
+      `https://api.opendota.com/api/heroes/${heroId}/itemPopularity`,
+      {
+        next: { revalidate: 3600 },
+      },
+    );
+
+    if (!response.ok) {
+      return {};
+    }
+
+    return await response.json();
+  } catch {
+    return {};
+  }
+}
+
+async function getItemConstants() {
+  try {
+    const response = await fetch(
+      'https://api.opendota.com/api/constants/items',
+      {
+        next: { revalidate: 86400 },
+      },
+    );
+
+    if (!response.ok) {
+      return {};
+    }
+
+    return await response.json();
+  } catch {
+    return {};
+  }
 }
 
 export default async function HeroPage({ params }) {
@@ -70,9 +109,13 @@ export default async function HeroPage({ params }) {
     Ringmaster: 'Ring Master',
   };
 
-  const heroMatchups = openDotaHeroId
-    ? await getHeroMatchups(openDotaHeroId)
-    : [];
+  const [heroMatchups, heroItemPopularity, itemConstants] = openDotaHeroId
+    ? await Promise.all([
+        getHeroMatchups(openDotaHeroId),
+        getHeroItemPopularity(openDotaHeroId),
+        getItemConstants(),
+      ])
+    : [[], {}, {}];
 
   const matchupData = heroMatchups.map((matchup) => {
     const opponentName = heroById.get(matchup.hero_id);
@@ -183,8 +226,15 @@ export default async function HeroPage({ params }) {
 
         <HeroStats stats={currentStats} />
         <HeroDetails stats={currentStats} />
+
         <TalentTree talents={currentTalents} />
         <AghanimUpgrades upgrades={currentAghsUpgrades} />
+
+        <HeroBuilds
+          popularity={heroItemPopularity}
+          itemConstants={itemConstants}
+        />
+
         <section className="mt-12">
           <h2 className="text-3xl font-bold">Abilities</h2>
 

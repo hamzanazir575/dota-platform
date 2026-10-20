@@ -47,11 +47,11 @@ export default function AghanimUpgrades({ upgrades }) {
               {title}
             </span>
 
-            {upgrade.skillName && (
+            {upgrade.abilityName && (
               <p className="mt-4 text-sm text-neutral-400">
-                {upgrade.newSkill ? 'New ability' : 'Related ability'}:{' '}
+                {upgrade.grantsNewAbility ? 'New ability' : 'Related ability'}:{' '}
                 <span className="font-semibold text-white">
-                  {upgrade.skillName}
+                  {upgrade.abilityName}
                 </span>
               </p>
             )}

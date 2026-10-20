@@ -36,7 +36,9 @@ export default function ItemCard({ item, itemKey }) {
         </p>
 
         <div className="mt-4 flex flex-wrap items-center gap-3 text-sm">
-          <span className="font-semibold text-red-400">{item.cost ?? 0}g</span>
+          <span className="font-semibold text-amber-300">
+            {item.cost ?? 0}g
+          </span>
 
           {item.mc && <span className="text-blue-400">{item.mc} mana</span>}
 
