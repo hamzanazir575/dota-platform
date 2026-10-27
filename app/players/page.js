@@ -8,7 +8,7 @@ export default function Players() {
   const [error, setError] = useState('');
   const [fetchError, setFetchError] = useState('');
   const [players, setPlayers] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [results, setResults] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
 
@@ -111,7 +111,14 @@ export default function Players() {
               {fetchError}
             </p>
           )}
-          {loading && <p>Loading players...</p>}
+          {loading && (
+            <div
+              role="status"
+              className="flex items-center justify-center gap-3 py-6 max-w-2xl"
+            >
+              <span className="h-50 w-50 animate-spin rounded-full border-4 border-neutral-700 border-t-red-500" />
+            </div>
+          )}
 
           {!loading &&
             results.map((player) => {
