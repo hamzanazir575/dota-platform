@@ -1,17 +1,19 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function TeamCard({ team }) {
   return (
     <Link
       href={`/teams/${team.team_id}`}
-      className="block overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-lg transition hover:-translate-y-1 hover:border-red-500 cursor-pointer
-    "
+      className="block cursor-pointer overflow-hidden rounded-xl border border-neutral-800 bg-neutral-900 shadow-lg transition hover:-translate-y-1 hover:border-red-500"
     >
       <div className="flex h-32 items-center justify-center bg-neutral-800">
         {team.logo_url ? (
-          <img
+          <Image
             src={team.logo_url}
-            alt={team.name}
+            alt={team.name || 'Team logo'}
+            width={128}
+            height={128}
             className="h-full w-full object-contain p-4"
           />
         ) : (

@@ -44,7 +44,7 @@ export default function TournamentsList({ leagues }) {
         {filtered.length === 0 ? (
           <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-8 text-center">
             <p className="text-neutral-400">
-              No tournaments found for "{searchTerm}".
+              No tournaments found for &quot;{searchTerm}&quot;.
             </p>
           </div>
         ) : (

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 export default async function PlayerPage({ params }) {
@@ -31,13 +32,15 @@ export default async function PlayerPage({ params }) {
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
-          <div className="border-b border-neutral-800 bg-gradient-to-r from-neutral-900 via-neutral-900 to-red-950/30 p-6 sm:p-8">
+          <div className="border-b border-neutral-800 bg-linear-to-r from-neutral-900 via-neutral-900 to-red-950/30 p-6 sm:p-8">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
               <div className="h-28 w-28 shrink-0 overflow-hidden rounded-full border-4 border-neutral-700 bg-neutral-800 shadow-xl">
                 {data.profile.avatarfull ? (
-                  <img
+                  <Image
                     src={data.profile.avatarfull}
                     alt={data.profile.personaname || 'Player avatar'}
+                    width={112}
+                    height={112}
                     className="h-full w-full object-cover"
                   />
                 ) : (

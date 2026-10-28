@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function MetaHeroCard({ hero }) {
@@ -9,9 +10,11 @@ export default function MetaHeroCard({ hero }) {
       className="flex items-center gap-4 rounded-xl border border-neutral-800 bg-neutral-900 p-4 shadow-lg transition hover:border-red-500"
     >
       {hero.image ? (
-        <img
+        <Image
           src={hero.image}
           alt={hero.name}
+          width={88}
+          height={56}
           className="h-14 w-22 rounded-md bg-neutral-800 object-cover"
         />
       ) : (

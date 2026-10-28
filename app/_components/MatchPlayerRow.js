@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import ItemBuild from './ItemBuild';
+import Image from 'next/image';
 
 export default function MatchPlayerRow({ player, team, hero, items }) {
   function formatNumber(value) {
@@ -28,9 +29,11 @@ export default function MatchPlayerRow({ player, team, hero, items }) {
       <div className="flex min-w-0 items-center gap-3">
         <div className="h-10 w-16 shrink-0 overflow-hidden rounded-md bg-neutral-800">
           {hero.image ? (
-            <img
+            <Image
               src={hero.image}
               alt={hero.name}
+              width={64}
+              height={40}
               className="h-full w-full object-cover"
             />
           ) : (

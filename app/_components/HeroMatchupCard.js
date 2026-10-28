@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function HeroMatchupCard({ matchup, type }) {
@@ -10,9 +11,11 @@ export default function HeroMatchupCard({ matchup, type }) {
       className="flex items-center gap-4 rounded-xl border border-neutral-800 bg-neutral-900 p-3 transition hover:-translate-y-1 hover:border-red-300"
     >
       {matchup.image ? (
-        <img
+        <Image
           src={matchup.image}
           alt={matchup.name}
+          width={64}
+          height={40}
           className="h-10 w-16 shrink-0 rounded-md bg-neutral-800 object-cover"
         />
       ) : (

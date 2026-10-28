@@ -8,7 +8,11 @@ export default function TeamsList({ teams }) {
   const query = searchTerm.trim().toLowerCase();
 
   const filtered = query
-    ? teams.filter((team) => team.name?.toLowerCase().includes(query))
+    ? teams.filter((team) =>
+        String(team.name ?? '')
+          .toLowerCase()
+          .includes(query),
+      )
     : teams.slice(0, 20);
 
   return (

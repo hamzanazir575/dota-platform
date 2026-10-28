@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { formatDuration, formatGoldLead } from '../_lib/format';
 import { heroImages } from '../_lib/hero-images';
+import Image from 'next/image';
 
 function getHeroInfo(heroes, heroId) {
   const hero = heroes[String(heroId)];
@@ -70,10 +71,12 @@ export default function LiveMatchCard({ match, heroes }) {
             const hero = getHeroInfo(heroes, player.hero_id);
 
             return hero.image ? (
-              <img
+              <Image
                 key={player.account_id}
                 src={hero.image}
                 alt={hero.name}
+                width={32}
+                height={32}
                 className="h-6 w-6 rounded-md border border-neutral-700 object-cover min-[1000px]:h-8 min-[1000px]:w-8"
               />
             ) : (
@@ -92,10 +95,12 @@ export default function LiveMatchCard({ match, heroes }) {
             const hero = getHeroInfo(heroes, player.hero_id);
 
             return hero.image ? (
-              <img
+              <Image
                 key={player.account_id}
                 src={hero.image}
                 alt={hero.name}
+                width={32}
+                height={32}
                 className="h-6 w-6 rounded-md border border-neutral-700 object-cover min-[1000px]:h-8 min-[1000px]:w-8"
               />
             ) : (

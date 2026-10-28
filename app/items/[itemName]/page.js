@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 async function getItems() {
@@ -26,9 +27,11 @@ export default async function ItemPage({ params }) {
         <div className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
           <div className="flex h-56 items-center justify-center border-b border-neutral-800 bg-neutral-950">
             {item.img ? (
-              <img
+              <Image
                 src={`https://cdn.cloudflare.steamstatic.com${item.img}`}
                 alt={item.dname}
+                width={176}
+                height={128}
                 className="h-32 w-auto object-contain"
               />
             ) : (

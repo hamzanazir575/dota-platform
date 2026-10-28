@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const IMAGE_BASE = 'https://cdn.cloudflare.steamstatic.com';
@@ -209,9 +210,11 @@ export default function HeroBuilds({ popularity, itemConstants }) {
                     >
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-neutral-800">
                         {item.img ? (
-                          <img
+                          <Image
                             src={`${IMAGE_BASE}${item.img}`}
                             alt={item.dname}
+                            width={88}
+                            height={64}
                             className="max-h-12 max-w-12 object-contain"
                           />
                         ) : (
@@ -222,7 +225,7 @@ export default function HeroBuilds({ popularity, itemConstants }) {
                       </div>
 
                       <div className="min-w-0">
-                        <p className="break-words text-sm font-semibold text-white">
+                        <p className="wrap-break-word text-sm font-semibold text-white">
                           {item.dname}
                         </p>
 

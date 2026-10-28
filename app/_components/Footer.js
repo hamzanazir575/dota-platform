@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-neutral-800 bg-neutral-900 px-6 py-10 text-white sm:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className=' grid sm:grid-cols-2 gap-10 lg:grid-cols-3"'>
+        <div className="grid sm:grid-cols-2 gap-10 lg:grid-cols-3">
           <div className="flex flex-col gap-3">
             <h2 className="text-xl font-bold">Dota 2 Platform</h2>
             <p className="max-w-sm text-sm leading-6 text-neutral-400 mb-4">

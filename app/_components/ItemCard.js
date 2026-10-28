@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const IMAGE_BASE = 'https://cdn.cloudflare.steamstatic.com';
@@ -10,9 +11,11 @@ export default function ItemCard({ item, itemKey }) {
     >
       <div className="flex h-32 items-center justify-center bg-neutral-800">
         {item.img ? (
-          <img
+          <Image
             src={`${IMAGE_BASE}${item.img}`}
             alt={item.dname}
+            width={88}
+            height={64}
             className="h-16 w-auto object-contain"
           />
         ) : (

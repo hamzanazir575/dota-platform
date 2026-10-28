@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default function PlayerCard({ player }) {
@@ -8,9 +9,11 @@ export default function PlayerCard({ player }) {
     >
       <div className="flex h-40 items-center justify-center bg-neutral-800">
         {player.avatarfull ? (
-          <img
+          <Image
             src={player.avatarfull}
             alt={player.personaname}
+            width={184}
+            height={184}
             className="h-full w-full object-contain p-2"
           />
         ) : (

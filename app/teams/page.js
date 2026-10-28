@@ -1,8 +1,27 @@
 import TeamsList from '../_components/TeamsList';
 
 export default async function TeamsPage() {
-  const response = await fetch('https://api.opendota.com/api/teams');
-  const teams = await response.json();
+  let teams = [];
+  let hasError = false;
+
+  try {
+    const response = await fetch('https://api.opendota.com/api/teams');
+
+    if (!response.ok) {
+      throw new Error(`OpenDota returned status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error('Unexpected team data received from OpenDota');
+    }
+
+    teams = data;
+  } catch (error) {
+    console.error('Failed to load teams:', error);
+    hasError = true;
+  }
 
   return (
     <main className="min-h-screen bg-neutral-950 px-8 py-12 text-white">
@@ -13,7 +32,13 @@ export default async function TeamsPage() {
           matches.
         </p>
 
-        <TeamsList teams={teams} />
+        {hasError ? (
+          <p>Team data is temporarily unavailable. Please try again later.</p>
+        ) : teams.length === 0 ? (
+          <p>No team data is currently available</p>
+        ) : (
+          <TeamsList teams={teams} />
+        )}
       </div>
     </main>
   );

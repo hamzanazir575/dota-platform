@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 const IMAGE_BASE = 'https://cdn.cloudflare.steamstatic.com';
 
 export default function ItemBuild({ items }) {
@@ -8,11 +10,13 @@ export default function ItemBuild({ items }) {
   return (
     <div className="flex gap-1">
       {equippedItems.map((item, index) => (
-        <img
+        <Image
           key={index}
           src={`${IMAGE_BASE}${item.img}`}
           alt={item.dname}
           title={item.dname}
+          width={88}
+          height={64}
           className="h-8 w-auto rounded"
         />
       ))}

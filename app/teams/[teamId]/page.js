@@ -1,4 +1,5 @@
 import { formatDate, formatDuration } from '@/app/_lib/format';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
@@ -69,13 +70,15 @@ export default async function TeamPage({ params }) {
         </div>
 
         <div className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
-          <div className="border-b border-neutral-800 bg-gradient-to-r from-neutral-900 via-neutral-900 to-red-950/30 p-6 sm:p-8">
+          <div className="border-b border-neutral-800 bg-linear-to-r from-neutral-900 via-neutral-900 to-red-950/30 p-6 sm:p-8">
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
               <div className="flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-neutral-700 bg-neutral-800 p-4 shadow-xl">
                 {team.logo_url ? (
-                  <img
+                  <Image
                     src={team.logo_url}
                     alt={team.name || 'Team logo'}
+                    width={128}
+                    height={128}
                     className="h-full w-full object-contain"
                   />
                 ) : (
