@@ -18,7 +18,21 @@ export default function Players() {
 
       try {
         const response = await fetch('https://api.opendota.com/api/proPlayers');
+
+        if (!response.ok) {
+          throw new Error(`OpenDota returned status ${response.status}`);
+        }
+
         const data = await response.json();
+
+        if (!Array.isArray(data)) {
+          throw new Error('Unexpected player data received from OpenDota');
+        }
+
+        if (!data.every((player) => player && typeof player === 'object')) {
+          throw new Error('Unexpected player entry received from OpenDota');
+        }
+
         setPlayers(data);
 
         const savedSearch = sessionStorage.getItem('players-search');

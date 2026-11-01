@@ -18,39 +18,76 @@ async function getMatch(matchId) {
     notFound();
   }
 
+  if (!Array.isArray(data.players)) {
+    notFound();
+  }
+
   return data;
 }
 
 async function getHeroes() {
-  const response = await fetch('https://api.opendota.com/api/constants/heroes');
+  try {
+    const response = await fetch(
+      'https://api.opendota.com/api/constants/heroes',
+    );
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return {};
+    }
+
+    const data = await response.json();
+    if (data === null || typeof data !== 'object' || Array.isArray(data)) {
+      return {};
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Failed to load heroes', error);
     return {};
   }
-
-  return response.json();
 }
 
 async function getItems() {
-  const response = await fetch('https://api.opendota.com/api/constants/items');
+  try {
+    const response = await fetch(
+      'https://api.opendota.com/api/constants/items',
+    );
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return {};
+    }
+
+    const data = await response.json();
+    if (data === null || typeof data !== 'object' || Array.isArray(data)) {
+      return {};
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Failed to load items:', error);
     return {};
   }
-
-  return response.json();
 }
 
 async function getItemIds() {
-  const response = await fetch(
-    'https://api.opendota.com/api/constants/item_ids',
-  );
+  try {
+    const response = await fetch(
+      'https://api.opendota.com/api/constants/item_ids',
+    );
 
-  if (!response.ok) {
-    return {};
+    if (!response.ok) {
+      return {};
+    }
+
+    const data = await response.json();
+    if (data === null || typeof data !== 'object' || Array.isArray(data)) {
+      return {};
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Failed to load item IDs:', error);
   }
-
-  return response.json();
 }
 
 export default async function MatchPage({ params }) {
@@ -111,7 +148,7 @@ export default async function MatchPage({ params }) {
         </div>
 
         <section className="overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-900 shadow-2xl">
-          <div className="border-b border-neutral-800 bg-gradient-to-r from-neutral-900 via-neutral-900 to-red-950/30 p-6 sm:p-8">
+          <div className="border-b border-neutral-800 bg-linear-to-r from-neutral-900 via-neutral-900 to-red-950/30 p-6 sm:p-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <p className="text-sm font-semibold text-red-400">
@@ -247,7 +284,7 @@ export default async function MatchPage({ params }) {
           </div>
 
           <div className="overflow-x-auto rounded-2xl border border-neutral-800 bg-neutral-900 shadow-xl">
-            <div className="min-w-[1100px]">
+            <div className="min-w-275">
               <div className="grid grid-cols-[minmax(180px,1.5fr)_minmax(160px,1.2fr)_repeat(9,70px)] items-center gap-4 bg-neutral-950 px-4 py-4 text-xs font-semibold uppercase tracking-wider text-neutral-500">
                 <span>Player</span>
                 <span>Hero</span>

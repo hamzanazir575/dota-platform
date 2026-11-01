@@ -1,14 +1,38 @@
-import { notFound } from 'next/navigation';
 import TournamentsList from '../_components/TournamentsList';
 
 export default async function TournamentsPage() {
-  const response = await fetch('https://api.opendota.com/api/leagues');
+  let leagues = [];
+  let hasError = false;
 
-  if (!response.ok) {
-    notFound();
+  try {
+    const response = await fetch('https://api.opendota.com/api/leagues');
+
+    if (!response.ok) {
+      throw new Error(`OpenDota returned status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error('Unexpected tournament data received from OpenDota');
+    }
+
+    if (
+      !data.every(
+        (league) =>
+          typeof league === 'object' &&
+          league !== null &&
+          !Array.isArray(league),
+      )
+    ) {
+      throw new Error('Unexpected tournament entry received from OpenDota');
+    }
+
+    leagues = data;
+  } catch (error) {
+    console.error('Failed to load tournaments', error);
+    hasError = true;
   }
-
-  const leagues = await response.json();
 
   return (
     <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white sm:px-8">
@@ -27,8 +51,15 @@ export default async function TournamentsPage() {
             and competitive matches.
           </p>
         </div>
-
-        <TournamentsList leagues={leagues} />
+        {hasError ? (
+          <p>
+            Tournament data is temporarily unavailable. Please try again later.
+          </p>
+        ) : leagues.length === 0 ? (
+          <p>No tournament data is currently available.</p>
+        ) : (
+          <TournamentsList leagues={leagues} />
+        )}
       </div>
     </main>
   );

@@ -3,12 +3,23 @@ import { heroImages } from '../_lib/hero-images';
 import { normalizeHeroName } from '../_lib/hero-name-overrides';
 
 async function getHeroStats() {
-  const response = await fetch('https://api.opendota.com/api/heroStats');
+  try {
+    const response = await fetch('https://api.opendota.com/api/heroStats');
 
-  if (!response.ok) {
+    if (!response.ok) {
+      return [];
+    }
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      return [];
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Failed to load hero stats', error);
     return [];
   }
-  return response.json();
 }
 
 export default async function HeroMeta() {
