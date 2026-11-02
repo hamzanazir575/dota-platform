@@ -8,9 +8,25 @@ export default async function PlayerPage({ params }) {
     `https://api.opendota.com/api/players/${accountId}`,
   );
 
+  if (!response.ok) {
+    if (response.status === 404) {
+      notFound();
+    }
+
+    throw new Error(`OpenDota returned status ${response.status}`);
+  }
+
   const data = await response.json();
 
-  if (!data.profile) {
+  if (data === null || typeof data !== 'object' || Array.isArray(data)) {
+    notFound();
+  }
+
+  if (
+    data.profile === null ||
+    typeof data.profile !== 'object' ||
+    Array.isArray(data.profile)
+  ) {
     notFound();
   }
 

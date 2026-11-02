@@ -13,46 +13,43 @@ const featuredHeroes = heroes.filter((hero) =>
   featuredNames.includes(hero.name),
 );
 
-async function getRecentMatches() {
-  const response = await fetch('https://api.opendota.com/api/proMatches');
+async function getArrayData(url, resourceName) {
+  try {
+    const response = await fetch(url);
 
-  if (!response.ok) {
+    if (!response.ok) {
+      throw new Error(`OpenDota returned status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data)) {
+      throw new Error(`Unexpected ${resourceName} data received from OpenDota`);
+    }
+
+    if (
+      !data.every(
+        (item) =>
+          item !== null && typeof item === 'object' && !Array.isArray(item),
+      )
+    ) {
+      throw new Error(
+        `Unexpected ${resourceName} entry received from OpenDota`,
+      );
+    }
+
+    return data;
+  } catch (error) {
+    console.error(`Failed to load ${resourceName}:`, error);
     return [];
   }
-
-  const data = await response.json();
-
-  if (!data) {
-    return [];
-  }
-
-  return data;
-}
-
-async function getProPlayers() {
-  const response = await fetch('https://api.opendota.com/api/proPlayers');
-
-  if (!response.ok) {
-    return [];
-  }
-
-  return response.json();
-}
-
-async function getTeams() {
-  const response = await fetch('https://api.opendota.com/api/teams');
-
-  if (!response.ok) {
-    return [];
-  }
-  return response.json();
 }
 
 export default async function Home() {
   const [matches, players, teams] = await Promise.all([
-    getRecentMatches(),
-    getProPlayers(),
-    getTeams(),
+    getArrayData('https://api.opendota.com/api/proMatches', 'recent matches'),
+    getArrayData('https://api.opendota.com/api/proPlayers', 'players'),
+    getArrayData('https://api.opendota.com/api/teams', 'teams'),
   ]);
   return (
     <main className="min-h-screen bg-neutral-950 px-8 py-12 text-white">

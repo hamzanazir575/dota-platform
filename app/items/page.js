@@ -1,13 +1,35 @@
 import ItemList from '../_components/ItemList';
 
 async function getItems() {
-  const response = await fetch('https://api.opendota.com/api/constants/items');
+  try {
+    const response = await fetch(
+      'https://api.opendota.com/api/constants/items',
+    );
 
-  if (!response.ok) {
+    if (!response.ok) {
+      throw new Error(`OpenDota returned status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data === null || typeof data !== 'object' || Array.isArray(data)) {
+      throw new Error('Unexpected item data received from OpenDota');
+    }
+
+    if (
+      !Object.values(data).every(
+        (item) =>
+          item !== null && typeof item === 'object' && !Array.isArray(item),
+      )
+    ) {
+      throw new Error('Unexpected item entry received from OpenDota');
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Failed to load items:', error);
     return {};
   }
-
-  return response.json();
 }
 
 export default async function ItemsPage() {
@@ -27,7 +49,13 @@ export default async function ItemsPage() {
           </p>
         </div>
 
-        <ItemList items={itemList} />
+        {itemList.length === 0 ? (
+          <p className="mt-8 text-neutral-400">
+            Item data is temporarily unavailable. Please try again later.
+          </p>
+        ) : (
+          <ItemList items={itemList} />
+        )}
       </div>
     </main>
   );

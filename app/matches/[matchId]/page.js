@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { heroImages } from '@/app/_lib/hero-images';
 import MatchPlayerRow from '@/app/_components/MatchPlayerRow';
 import { formatDate, formatDuration, formatGoldLead } from '@/app/_lib/format';
+import { Suspense } from 'react';
 
 async function getMatch(matchId) {
   const response = await fetch(
@@ -9,7 +10,11 @@ async function getMatch(matchId) {
   );
 
   if (!response.ok) {
-    notFound();
+    if (response.status === 404) {
+      notFound();
+    }
+
+    throw new Error(`OpenDota returned status ${response.status}`);
   }
 
   const data = await response.json();
@@ -20,6 +25,14 @@ async function getMatch(matchId) {
 
   if (!Array.isArray(data.players)) {
     notFound();
+  }
+  if (
+    !data.players.every(
+      (player) =>
+        player !== null && typeof player === 'object' && !Array.isArray(player),
+    )
+  ) {
+    throw new Error('Unexpected match player data received from OpenDota');
   }
 
   return data;
@@ -87,14 +100,12 @@ async function getItemIds() {
     return data;
   } catch (error) {
     console.error('Failed to load item IDs:', error);
+    return {};
   }
 }
 
-export default async function MatchPage({ params }) {
-  const { matchId } = await params;
-
-  const [match, heroes, items, itemIds] = await Promise.all([
-    getMatch(matchId),
+async function MatchPlayers({ match }) {
+  const [heroes, items, itemIds] = await Promise.all([
     getHeroes(),
     getItems(),
     getItemIds(),
@@ -130,6 +141,92 @@ export default async function MatchPage({ params }) {
 
     return items[itemName] ?? null;
   }
+
+  return (
+    <section className="mt-10">
+      <div className="mb-6">
+        <h2 className="text-2xl font-bold">Players</h2>
+
+        <p className="mt-1 text-sm text-neutral-500">
+          Full player performance from this match.
+        </p>
+      </div>
+
+      <div className="overflow-x-auto rounded-2xl border border-neutral-800 bg-neutral-900 shadow-xl">
+        <div className="min-w-275">
+          <div className="grid grid-cols-[minmax(180px,1.5fr)_minmax(160px,1.2fr)_repeat(9,70px)] items-center gap-4 bg-neutral-950 px-4 py-4 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+            <span>Player</span>
+            <span>Hero</span>
+            <span className="text-center">LVL</span>
+            <span className="text-center">K</span>
+            <span className="text-center">D</span>
+            <span className="text-center">A</span>
+            <span className="text-center">LH</span>
+            <span className="text-center">DN</span>
+            <span className="text-center">GPM</span>
+            <span className="text-center">XPM</span>
+            <span className="text-center">Net Worth</span>
+          </div>
+
+          <div className="bg-green-950/10 mb-4">
+            <div className="border-b border-neutral-800 bg-green-950/20 px-4 py-3">
+              <p className="text-sm font-bold text-green-400">
+                Radiant — {match.radiant_name || 'Radiant'}
+              </p>
+            </div>
+
+            {radiantPlayers.map((player) => (
+              <MatchPlayerRow
+                key={player.account_id || player.player_slot}
+                player={player}
+                team="Radiant"
+                hero={getHeroInfo(player.hero_id)}
+                items={[
+                  player.item_0,
+                  player.item_1,
+                  player.item_2,
+                  player.item_3,
+                  player.item_4,
+                  player.item_5,
+                ].map(getItemInfo)}
+              />
+            ))}
+          </div>
+
+          <div className="bg-red-950/10">
+            <div className="border-b border-neutral-800 bg-red-950/20 px-4 py-3">
+              <p className="text-sm font-bold text-red-400">
+                Dire — {match.dire_name || 'Dire'}
+              </p>
+            </div>
+
+            {direPlayers.map((player) => (
+              <MatchPlayerRow
+                key={player.account_id || player.player_slot}
+                player={player}
+                team="Dire"
+                hero={getHeroInfo(player.hero_id)}
+                items={[
+                  player.item_0,
+                  player.item_1,
+                  player.item_2,
+                  player.item_3,
+                  player.item_4,
+                  player.item_5,
+                ].map(getItemInfo)}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default async function MatchPage({ params }) {
+  const { matchId } = await params;
+
+  const match = await getMatch(matchId);
 
   const radiantWon = match.radiant_win;
   const finalGoldAdvantage = match.radiant_gold_adv?.at(-1) ?? 0;
@@ -273,84 +370,15 @@ export default async function MatchPage({ params }) {
             </div>
           </div>
         </section>
-
-        <section className="mt-10">
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold">Players</h2>
-
-            <p className="mt-1 text-sm text-neutral-500">
-              Full player performance from this match.
-            </p>
-          </div>
-
-          <div className="overflow-x-auto rounded-2xl border border-neutral-800 bg-neutral-900 shadow-xl">
-            <div className="min-w-275">
-              <div className="grid grid-cols-[minmax(180px,1.5fr)_minmax(160px,1.2fr)_repeat(9,70px)] items-center gap-4 bg-neutral-950 px-4 py-4 text-xs font-semibold uppercase tracking-wider text-neutral-500">
-                <span>Player</span>
-                <span>Hero</span>
-                <span className="text-center">LVL</span>
-                <span className="text-center">K</span>
-                <span className="text-center">D</span>
-                <span className="text-center">A</span>
-                <span className="text-center">LH</span>
-                <span className="text-center">DN</span>
-                <span className="text-center">GPM</span>
-                <span className="text-center">XPM</span>
-                <span className="text-center">Net Worth</span>
-              </div>
-
-              <div className="bg-green-950/10 mb-4">
-                <div className="border-b border-neutral-800 bg-green-950/20 px-4 py-3">
-                  <p className="text-sm font-bold text-green-400">
-                    Radiant — {match.radiant_name || 'Radiant'}
-                  </p>
-                </div>
-
-                {radiantPlayers.map((player) => (
-                  <MatchPlayerRow
-                    key={player.account_id || player.player_slot}
-                    player={player}
-                    team="Radiant"
-                    hero={getHeroInfo(player.hero_id)}
-                    items={[
-                      player.item_0,
-                      player.item_1,
-                      player.item_2,
-                      player.item_3,
-                      player.item_4,
-                      player.item_5,
-                    ].map(getItemInfo)}
-                  />
-                ))}
-              </div>
-
-              <div className="bg-red-950/10">
-                <div className="border-b border-neutral-800 bg-red-950/20 px-4 py-3">
-                  <p className="text-sm font-bold text-red-400">
-                    Dire — {match.dire_name || 'Dire'}
-                  </p>
-                </div>
-
-                {direPlayers.map((player) => (
-                  <MatchPlayerRow
-                    key={player.account_id || player.player_slot}
-                    player={player}
-                    team="Dire"
-                    hero={getHeroInfo(player.hero_id)}
-                    items={[
-                      player.item_0,
-                      player.item_1,
-                      player.item_2,
-                      player.item_3,
-                      player.item_4,
-                      player.item_5,
-                    ].map(getItemInfo)}
-                  />
-                ))}
-              </div>
+        <Suspense
+          fallback={
+            <div className="mt-10 rounded-2xl border border-neutral-800 bg-neutral-900 p-8 text-center text-neutral-400">
+              Loading player statistics...
             </div>
-          </div>
-        </section>
+          }
+        >
+          <MatchPlayers match={match} />
+        </Suspense>
       </div>
     </main>
   );

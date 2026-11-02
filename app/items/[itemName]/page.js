@@ -88,7 +88,7 @@ export default async function ItemPage({ params }) {
                   Cooldown
                 </p>
                 <p className="mt-2 text-xl font-bold text-neutral-300">
-                  {item.cd ?? 0}s
+                  {Number(item.cd) > 0 ? `${item.cd}s` : ''}
                 </p>
               </div>
             </div>
