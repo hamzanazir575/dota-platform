@@ -7,7 +7,10 @@ async function getTeam(teamId) {
   const response = await fetch(`https://api.opendota.com/api/teams/${teamId}`);
 
   if (!response.ok) {
-    notFound();
+    if (response.status === 404) {
+      notFound();
+    }
+    throw new Error(`OpenDota returned status ${response.status}`);
   }
 
   const data = await response.json();
@@ -20,29 +23,59 @@ async function getTeam(teamId) {
 }
 
 async function getTeamRoster(teamId) {
-  const response = await fetch(
-    `https://api.opendota.com/api/teams/${teamId}/players`,
-  );
+  try {
+    const response = await fetch(
+      `https://api.opendota.com/api/teams/${teamId}/players`,
+    );
 
-  if (!response.ok) {
+    if (!response.ok) {
+      throw new Error(`OpenDota returned status ${response.status}`);
+    }
+
+    const players = await response.json();
+
+    if (!Array.isArray(players)) {
+      throw new Error('Expected an array of players');
+    }
+
+    if (
+      !players.every((player) => {
+        return (
+          player !== null &&
+          typeof player === 'object' &&
+          !Array.isArray(player)
+        );
+      })
+    ) {
+      throw new Error('Invalid player data received from OpenDota');
+    }
+
+    return players.filter((player) => player.is_current_team_member);
+  } catch (error) {
+    console.error('Failed to load team roster.', error);
     return [];
   }
-
-  const players = await response.json();
-
-  return players.filter((player) => player.is_current_team_member);
 }
 
 async function getTeamMatches(teamId) {
-  const response = await fetch(
-    `https://api.opendota.com/api/teams/${teamId}/matches`,
-  );
+  try {
+    const response = await fetch(
+      `https://api.opendota.com/api/teams/${teamId}/matches`,
+    );
 
-  if (!response.ok) {
+    if (!response.ok) {
+      throw new Error(`OpenDota returned status ${response.status}`);
+    }
+
+    const matches = await response.json();
+    if (!Array.isArray(matches)) {
+      throw new Error('Expected an array of team matches');
+    }
+    return matches;
+  } catch (error) {
+    console.error('Failed to load team matches:', error);
     return [];
   }
-
-  return response.json();
 }
 
 export default async function TeamPage({ params }) {

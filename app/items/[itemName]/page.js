@@ -2,19 +2,35 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 async function getItems() {
-  const response = await fetch('https://api.opendota.com/api/constants/items');
+  try {
+    const response = await fetch(
+      'https://api.opendota.com/api/constants/items',
+    );
 
-  if (!response.ok) {
-    return {};
+    if (!response.ok) {
+      throw new Error(`OpenDota returned status ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to load item data:', error);
   }
-
-  return response.json();
+  return null;
 }
 
 export default async function ItemPage({ params }) {
   const { itemName } = await params;
 
   const items = await getItems();
+  if (!items) {
+    return (
+      <main className="min-h-screen bg-neutral-950 px-6 py-12 text-white">
+        <p className="text-neutral-400">
+          Item data is temporarily unavailable. Please try again later.
+        </p>
+      </main>
+    );
+  }
   const item = items[itemName];
 
   if (!item) {
