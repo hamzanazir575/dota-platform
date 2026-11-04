@@ -4,10 +4,18 @@ import { notFound } from 'next/navigation';
 export default async function PlayerPage({ params }) {
   const { accountId } = await params;
 
-  const response = await fetch(
-    `https://api.opendota.com/api/players/${accountId}`,
-  );
+  if (!/^\d+$/.test(accountId)) {
+    notFound();
+  }
 
+  let response;
+
+  try {
+    response = await fetch(`https://api.opendota.com/api/players/${accountId}`);
+  } catch (error) {
+    console.error('Failed to fetch player data:', error);
+    throw new Error('Unable to connect to OpenDota.');
+  }
   if (!response.ok) {
     if (response.status === 404) {
       notFound();
@@ -16,7 +24,14 @@ export default async function PlayerPage({ params }) {
     throw new Error(`OpenDota returned status ${response.status}`);
   }
 
-  const data = await response.json();
+  let data;
+
+  try {
+    data = await response.json();
+  } catch (error) {
+    console.error('Failed to parse player data:', error);
+    throw new Error('OpenDota returned an invalid response.');
+  }
 
   if (data === null || typeof data !== 'object' || Array.isArray(data)) {
     notFound();

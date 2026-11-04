@@ -15,7 +15,6 @@ export default function Players() {
   useEffect(() => {
     async function fetchPlayers() {
       setLoading(true);
-
       try {
         const response = await fetch('https://api.opendota.com/api/proPlayers');
 
@@ -53,7 +52,7 @@ export default function Players() {
           setHasSearched(true);
         }
       } catch (err) {
-        console.log(err);
+        console.error('Failed to load players:', err);
         setFetchError('Could not load players. Please try again');
       } finally {
         setLoading(false);

@@ -6,17 +6,30 @@ async function getLeague(leagueId) {
     `https://api.opendota.com/api/leagues/${leagueId}`,
   );
 
-  if (!response.ok) {
+  if (response.status === 404) {
     notFound();
+  }
+
+  if (!response.ok) {
+    throw new Error(`OpenDota returned status ${response.status}`);
   }
 
   const text = await response.text();
 
-  if (!text) {
-    notFound();
+  if (!text.trim()) {
+    throw new Error('OpenDota returned an empty tournament response.');
   }
 
-  return JSON.parse(text);
+  let data;
+
+  try {
+    data = JSON.parse(text);
+  } catch (error) {
+    console.error('Failed to parse tournament data:', error);
+    throw new Error('OpenDota returned an invalid tournament response.');
+  }
+
+  return data;
 }
 
 async function getLeagueTeams(leagueId) {
@@ -25,16 +38,32 @@ async function getLeagueTeams(leagueId) {
   );
 
   if (!response.ok) {
+    console.error(`Failed to load tournament teams: HTTP ${response.status}`);
     return [];
   }
 
   const text = await response.text();
 
-  if (!text) {
+  if (!text.trim()) {
+    console.error('OpenDota returned an empty teams response.');
     return [];
   }
 
-  return JSON.parse(text);
+  let teams;
+
+  try {
+    teams = JSON.parse(text);
+  } catch (error) {
+    console.error('Failed to parse tournament teams:', error);
+    return [];
+  }
+
+  if (!Array.isArray(teams)) {
+    console.error('Expected an array of tournament teams.');
+    return [];
+  }
+
+  return teams;
 }
 
 export default async function TournamentPage({ params }) {

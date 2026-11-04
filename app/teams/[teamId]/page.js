@@ -4,22 +4,29 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 async function getTeam(teamId) {
-  const response = await fetch(`https://api.opendota.com/api/teams/${teamId}`);
+  try {
+    const response = await fetch(
+      `https://api.opendota.com/api/teams/${teamId}`,
+    );
 
-  if (!response.ok) {
-    if (response.status === 404) {
+    if (!response.ok) {
+      if (response.status === 404) {
+        notFound();
+      }
+      throw new Error(`OpenDota returned status ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (!data || !data.team_id) {
       notFound();
     }
-    throw new Error(`OpenDota returned status ${response.status}`);
+
+    return data;
+  } catch (error) {
+    console.error('Failed to load team data:', error);
+    throw error;
   }
-
-  const data = await response.json();
-
-  if (!data || !data.team_id) {
-    notFound();
-  }
-
-  return data;
 }
 
 async function getTeamRoster(teamId) {
@@ -70,6 +77,16 @@ async function getTeamMatches(teamId) {
     const matches = await response.json();
     if (!Array.isArray(matches)) {
       throw new Error('Expected an array of team matches');
+    }
+
+    if (
+      !matches.every((match) => {
+        return (
+          match !== null && typeof match === 'object' && !Array.isArray(match)
+        );
+      })
+    ) {
+      throw new Error('Invalid match data received from OpenDota');
     }
     return matches;
   } catch (error) {
