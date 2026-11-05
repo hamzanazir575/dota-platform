@@ -37,27 +37,32 @@ export default function UpdatePasswordPage() {
 
     setLoading(true);
 
-    const supabase = createClient();
+    try {
+      const supabase = createClient();
 
-    const { error } = await supabase.auth.updateUser({
-      password,
-    });
+      const { error } = await supabase.auth.updateUser({
+        password,
+      });
 
-    setLoading(false);
+      if (error) {
+        setError(error.message);
+        return;
+      }
 
-    if (error) {
-      setError(error.message);
-      return;
+      setMessage('Password updated successfully.');
+
+      setPassword('');
+      setConfirmPassword('');
+
+      setTimeout(() => {
+        router.push('/signin');
+      }, 1500);
+    } catch (err) {
+      console.error('Password update failed:', err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    setMessage('Password updated successfully.');
-
-    setPassword('');
-    setConfirmPassword('');
-
-    setTimeout(() => {
-      router.push('/signin');
-    }, 1500);
   }
 
   return (

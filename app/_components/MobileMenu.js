@@ -2,14 +2,33 @@
 
 import Link from 'next/link';
 import SignOutButton from './SignOutButton';
+import { useEffect, useRef } from 'react';
 
 function closeMenu(event) {
   event.currentTarget.closest('details')?.removeAttribute('open');
 }
 
 export default function MobileMenu({ navLinks, user, displayName }) {
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    function handleOutsideClick(event) {
+      const menu = menuRef.current;
+
+      if (menu?.open && !menu.contains(event.target)) {
+        menu.open = false;
+      }
+    }
+
+    document.addEventListener('pointerdown', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('pointerdown', handleOutsideClick);
+    };
+  }, []);
+
   return (
-    <details className="group min-[900px]:hidden">
+    <details ref={menuRef} className="group min-[900px]:hidden">
       <summary className="flex cursor-pointer list-none items-center justify-center rounded-md border border-neutral-700 bg-neutral-900 px-3 py-2 text-neutral-300 transition hover:border-neutral-500 hover:text-white [&::-webkit-details-marker]:hidden">
         <span className="text-xl leading-none">☰</span>
       </summary>

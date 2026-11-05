@@ -96,6 +96,12 @@ export default function Players() {
           <form onSubmit={handleSearch} className="flex gap-3">
             <input
               value={searchTerm}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleSearch(e);
+                }
+              }}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
               }}

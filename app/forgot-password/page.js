@@ -23,22 +23,30 @@ export default function ForgotPasswordPage() {
 
     setLoading(true);
 
-    const supabase = createClient();
+    try {
+      const supabase = createClient();
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-      redirectTo: `${window.location.origin}/auth/callback?next=/update-password`,
-    });
+      const { error } = await supabase.auth.resetPasswordForEmail(
+        email.trim(),
+        {
+          redirectTo: `${window.location.origin}/auth/callback?next=/update-password`,
+        },
+      );
 
-    setLoading(false);
+      if (error) {
+        setError(error.message);
+        return;
+      }
 
-    if (error) {
-      setError(error.message);
-      return;
+      setMessage(
+        'If an account exists for that email, you will receive a password reset email.',
+      );
+    } catch (err) {
+      console.error('Password reset failed:', err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    setMessage(
-      'If an account exists for that email, you will receive a password reset email.',
-    );
   }
 
   return (

@@ -25,22 +25,27 @@ export default function SignInPage() {
 
     setLoading(true);
 
-    const supabase = createClient();
+    try {
+      const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
 
-    setLoading(false);
+      if (error) {
+        setError(error.message);
+        return;
+      }
 
-    if (error) {
-      setError(error.message);
-      return;
+      router.push('/');
+      router.refresh();
+    } catch (err) {
+      console.error('Sign-in failed:', err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    router.push('/');
-    router.refresh();
   }
 
   return (
@@ -132,62 +137,3 @@ export default function SignInPage() {
     </main>
   );
 }
-
-// import { useState } from 'react';
-// import SignupForm from '../components/SignupForm'
-
-// export default function SignupForm() {
-//     const [name, setName] = useState('')
-//     const [email, setEmail] = useState('')
-//     const [password, setPassword] = useState('')
-//     const [confirmPassword, setConfirmPassword] = useState('')
-//     const [error, setError] = useState('')
-
-//     const handleSubmit = (e) =>  {
-//         e.preventDefault()
-
-//         setError('')
-
-//         if (!name || !password || !confirmPassword || !email)
-//         setError('Please fill in all fields.')
-//         return
-
-//         if(password.length < 8 )
-//         setError('Password must be at least 8 characters.')
-//         return
-
-//         if(password !== confirmPassword )
-//         setError('Passwords must match')
-//         return
-//     }
-
-//     return (
-//         <div className='bg-black'>
-//         <form onSubmit={handleSubmit}>
-//             <input
-//             type='text'
-//             value={name}
-//             onChange={(e) => setName(e.target.value)}
-//             />
-
-//             <input
-//             type='email'
-//             value={email}
-//             onChange={(e) => setEmail(e.target.value)}
-//             />
-//             <input
-//             type='password'
-//             value={password}
-//             onChange={(e) => setPassword(e.target.value)}
-//             />
-//             <input
-//             type='password'
-//             value={confirmPassword}
-//             onChange={(e) => setConfirmPassword(e.target.value)}
-//             />
-
-//             {error && <p>{error}</p>}
-//             </form>
-//             </div>
-//     )
-// }

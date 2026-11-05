@@ -327,7 +327,7 @@ export default async function MatchPage({ params }) {
             </div>
           </div>
 
-          <div className="grid gap-px bg-neutral-800 sm:grid-cols-2 lg:gird-cols-4">
+          <div className="grid gap-px bg-neutral-800 sm:grid-cols-2 lg:grid-cols-4">
             <div className="bg-neutral-900 p-6 text-center">
               <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
                 Duration

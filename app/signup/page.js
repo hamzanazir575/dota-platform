@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { createClient } from '@/lib/supabase/clients';
 
 export default function SignupPage() {
@@ -37,34 +36,39 @@ export default function SignupPage() {
 
     setLoading(true);
 
-    const supabase = createClient();
+    try {
+      const supabase = createClient();
 
-    const { error } = await supabase.auth.signUp({
-      email: email.trim(),
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-        data: {
-          name: name.trim(),
+      const { error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: {
+            name: name.trim(),
+          },
         },
-      },
-    });
+      });
 
-    setLoading(false);
+      if (error) {
+        setError(error.message);
+        return;
+      }
 
-    if (error) {
-      setError(error.message);
-      return;
+      setSuccess(
+        'Account created. Please check your email and confirm your account.',
+      );
+
+      setName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      console.error('Sign-up failed:', err);
+      setError('Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    setSuccess(
-      'Account created. Please check your email and confirm your account.',
-    );
-
-    setName('');
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
   }
 
   return (
