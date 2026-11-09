@@ -89,7 +89,9 @@ export default function Players() {
         <h1 className="text-4xl font-bold">Dota 2 Players</h1>
 
         <p className="mt-4 max-w-2xl text-neutral-400">
-          Search for a Dota 2 player by name
+          Search for a{' '}
+          <span className="text-bold capitalize">professional</span> Dota 2
+          player by name
         </p>
 
         <div className="mt-6">
