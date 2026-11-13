@@ -13,7 +13,7 @@ const featuredHeroes = heroes.filter((hero) =>
   featuredNames.includes(hero.name),
 );
 
-async function getArrayData(url, resourceName) {
+async function fetchOpenDotaArray(url, resourceName) {
   try {
     const response = await fetch(url);
 
@@ -47,9 +47,12 @@ async function getArrayData(url, resourceName) {
 
 export default async function Home() {
   const [matches, players, teams] = await Promise.all([
-    getArrayData('https://api.opendota.com/api/proMatches', 'recent matches'),
-    getArrayData('https://api.opendota.com/api/proPlayers', 'players'),
-    getArrayData('https://api.opendota.com/api/teams', 'teams'),
+    fetchOpenDotaArray(
+      'https://api.opendota.com/api/proMatches',
+      'recent matches',
+    ),
+    fetchOpenDotaArray('https://api.opendota.com/api/proPlayers', 'players'),
+    fetchOpenDotaArray('https://api.opendota.com/api/teams', 'teams'),
   ]);
   return (
     <main className="min-h-screen bg-neutral-950 px-8 py-12 text-white">

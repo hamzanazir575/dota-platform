@@ -1,22 +1,55 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import PlayerCard from '../_components/PlayerCard';
 
 export default function Players() {
-  const [searchTerm, setSearchTerm] = useState('');
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-neutral-950 px-8 py-12 text-white">
+          Loading players...
+        </main>
+      }
+    >
+      <PlayersPageContent />
+    </Suspense>
+  );
+}
+
+function PlayersPageContent() {
+  const searchParams = useSearchParams();
+  const query = searchParams.get('q') ?? '';
+
+  return <PlayersSearch key={query} query={query} />;
+}
+
+function PlayersSearch({ query }) {
+  const router = useRouter();
+
+  const [searchTerm, setSearchTerm] = useState(query);
   const [error, setError] = useState('');
   const [fetchError, setFetchError] = useState('');
-  const [players, setPlayers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(Boolean(query.trim()));
   const [results, setResults] = useState([]);
   const [hasSearched, setHasSearched] = useState(false);
 
   useEffect(() => {
-    async function fetchPlayers() {
-      setLoading(true);
+    const searchQuery = query.trim();
+
+    if (!searchQuery) {
+      return;
+    }
+
+    const controller = new AbortController();
+
+    async function searchPlayers() {
       try {
-        const response = await fetch('https://api.opendota.com/api/proPlayers');
+        const response = await fetch(
+          `https://api.opendota.com/api/search?q=${encodeURIComponent(searchQuery)}`,
+          { signal: controller.signal },
+        );
 
         if (!response.ok) {
           throw new Error(`OpenDota returned status ${response.status}`);
@@ -24,63 +57,54 @@ export default function Players() {
 
         const data = await response.json();
 
-        if (!Array.isArray(data)) {
-          throw new Error('Unexpected player data received from OpenDota');
+        if (
+          !Array.isArray(data) ||
+          !data.every(
+            (player) =>
+              player !== null &&
+              typeof player === 'object' &&
+              !Array.isArray(player),
+          )
+        ) {
+          throw new Error('Unexpected player search data');
         }
 
-        if (!data.every((player) => player && typeof player === 'object')) {
-          throw new Error('Unexpected player entry received from OpenDota');
-        }
-
-        setPlayers(data);
-
-        const savedSearch = sessionStorage.getItem('players-search');
-
-        if (savedSearch) {
-          setSearchTerm(savedSearch);
-
-          const query = savedSearch.trim().toLowerCase();
-
-          const filtered = data.filter((player) => {
-            return (
-              player.personaname &&
-              player.personaname.toLowerCase().includes(query)
-            );
-          });
-
-          setResults(filtered);
-          setHasSearched(true);
-        }
+        setResults(data);
+        setHasSearched(true);
       } catch (err) {
-        console.error('Failed to load players:', err);
-        setFetchError('Could not load players. Please try again');
+        if (err.name === 'AbortError') {
+          return;
+        }
+
+        console.error('Failed to search players:', err);
+
+        setResults([]);
+        setHasSearched(true);
+        setFetchError('Could not search players. Please try again');
       } finally {
-        setLoading(false);
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
       }
     }
-    fetchPlayers();
-  }, []);
+
+    searchPlayers();
+
+    return () => controller.abort();
+  }, [query]);
 
   function handleSearch(e) {
     e.preventDefault();
     setError('');
 
-    if (!searchTerm.trim()) {
+    const searchQuery = searchTerm.trim();
+
+    if (!searchQuery) {
       setError('Please search');
       return;
     }
 
-    const query = searchTerm.trim().toLowerCase();
-
-    sessionStorage.setItem('players-search', searchTerm.trim());
-
-    const filtered = players.filter((player) => {
-      return (
-        player.personaname && player.personaname.toLowerCase().includes(query)
-      );
-    });
-    setResults(filtered);
-    setHasSearched(true);
+    router.push(`/players?q=${encodeURIComponent(searchQuery)}`);
   }
 
   return (
@@ -97,53 +121,53 @@ export default function Players() {
           <form onSubmit={handleSearch} className="flex gap-3">
             <input
               value={searchTerm}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                  handleSearch(e);
-                }
-              }}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-              }}
-              className="flex-1 rounded-lg border bg-neutral-900 px-4 py-3 text-white focus:border-red-500 outline-none"
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 rounded-lg border bg-neutral-900 px-4 py-3 text-white outline-none focus:border-red-500"
               type="text"
               name="search"
               placeholder="Search for a player..."
             />
+
             <button
               type="submit"
-              className="hover:text-red-600 transition-colors cursor-pointer text-xl font-semibold px-4 py-3 rounded-lg border border-neutral-900"
+              className="cursor-pointer rounded-lg border border-neutral-900 px-4 py-3 text-xl font-semibold transition-colors hover:text-red-600"
             >
               Search
             </button>
           </form>
+
           {error && (
             <p className="mt-3 rounded-lg border border-red-800 bg-red-950/40 px-4 py-3 text-sm text-red-300">
               {error}
             </p>
           )}
         </div>
+
         <section className="mt-6">
-          <h2 className="text-2xl font-semibold mb-3">Search Results</h2>
+          {query && (
+            <h2 className="mb-3 text-2xl font-semibold">Matching Players</h2>
+          )}
+
           {fetchError && (
             <p className="mt-3 rounded-lg border border-red-800 bg-red-950/40 px-4 py-3 text-sm text-red-300">
               {fetchError}
             </p>
           )}
+
           {loading && (
             <div
               role="status"
-              className="flex items-center justify-center gap-3 py-6 max-w-2xl"
+              aria-label="Loading search results"
+              className="flex max-w-2xl items-center justify-center gap-3 py-6"
             >
-              <span className="h-50 w-50 animate-spin rounded-full border-4 border-neutral-700 border-t-red-500" />
+              <span className="h-10 w-10 animate-spin rounded-full border-4 border-neutral-700 border-t-red-500" />
             </div>
           )}
 
           {!loading &&
-            results.map((player) => {
-              return <PlayerCard key={player.account_id} player={player} />;
-            })}
+            results.map((player) => (
+              <PlayerCard key={player.account_id} player={player} />
+            ))}
 
           {!loading && !fetchError && hasSearched && results.length === 0 && (
             <p>No players found.</p>
